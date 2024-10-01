@@ -1,18 +1,12 @@
 package com.ksv.costmemories.entity
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity (tableName = "products")
+@Entity(tableName = "products",
+    indices = [Index(value = ["name"], unique = true)])
 data class Product(
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    val id: Int? = null,
-    @ColumnInfo(name = "name")
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String
-) {
-    override fun toString(): String {
-        return "$id: $name"
-    }
-}
+)
