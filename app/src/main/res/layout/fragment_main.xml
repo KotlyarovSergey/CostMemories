@@ -19,28 +19,12 @@
 
 
         <Button
-            android:id="@+id/shops_button"
+            android:id="@+id/fill_db"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="8dp"
-            android:text="SHOPS" />
-
-        <Button
-            android:id="@+id/products_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="8dp"
-            android:text="OTHERS" />
-
-        <Button
-            android:id="@+id/find_fragment_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="8dp"
-            android:text="FIND FRAGMENT" />
+            android:text="FILL DB" />
 
 
     </LinearLayout>

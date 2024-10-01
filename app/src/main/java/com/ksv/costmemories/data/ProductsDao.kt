@@ -11,7 +11,7 @@ import com.ksv.costmemories.entity.Product
 @Dao
 interface ProductsDao {
     @Query("SELECT * FROM products")
-    suspend fun getAllGroups(): List<Product>
+    suspend fun getAllProducts(): List<Product>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(product: Product)

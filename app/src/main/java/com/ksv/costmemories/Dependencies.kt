@@ -17,7 +17,7 @@ object Dependencies {
     }
 
     fun getShopsDao() = appDatabase.getShopsDao()
-    fun getGroupsDao() = appDatabase.getTitlesDao()
+    fun getTitlesDao() = appDatabase.getTitlesDao()
     fun getProductsDao() = appDatabase.getProductsDao()
     fun getPurchasesDao() = appDatabase.getPurchasesDao()
 }

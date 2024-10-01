@@ -9,7 +9,7 @@ import com.ksv.costmemories.entity.Title
 
 @Dao
 interface TitlesDao {
-    @Query("SELECT * FROM products")
+    @Query("SELECT * FROM titles")
     suspend fun getAllProducts(): List<Title>
 
     @Insert
