@@ -15,8 +15,8 @@ interface PurchasesDao {
     @Query("SELECT * FROM purchases")
     suspend fun getAll(): List<Purchase>
 
-    @Query("SELECT purchases.id, date, products.name AS product_name, titles.text AS title, " +
-            "shops.shop_name AS shop_name, comment FROM purchases " +
+    @Query("SELECT purchases.id, date, cost, comment, products.name AS product_name, " +
+            "titles.text AS title, shops.shop_name AS shop_name, comment FROM purchases " +
             "INNER JOIN products ON purchases.product_id = products.id " +
             "INNER JOIN titles ON purchases.title_id = titles.id " +
             "INNER JOIN shops ON purchases.shop_id = shops.id")

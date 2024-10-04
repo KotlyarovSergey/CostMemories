@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">CostMemories</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="date_picker_title">Дата покупки</string>
+    <string name="empty_title_error">Поле Название не может быть пустым</string>
+    <string name="date_input_error">Неверная дата</string>
+    <string name="cost_input_error">Неверная цена</string>
+    <string name="add_purchase_success">Покупка добавлена</string>
 </resources>
