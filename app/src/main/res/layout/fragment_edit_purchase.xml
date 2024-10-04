@@ -24,13 +24,29 @@
             android:layout_marginBottom="16dp"
             android:text="Новая покупка"/>
 
-        <EditText
-            android:id="@+id/date"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="16dp"
-            android:hint="Дата"/>
+            android:orientation="horizontal">
 
+            <EditText
+                android:id="@+id/date_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:layout_weight="1.0"
+                android:inputType="date"
+                android:layout_marginEnd="16dp"
+                android:hint="Дата"/>
+            <ImageButton
+                android:id="@+id/date_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:backgroundTint="#2196F3"
+                android:src="@drawable/baseline_calendar_month_24"
+                />
+        </LinearLayout>
         <AutoCompleteTextView
             android:id="@+id/product"
             android:layout_width="match_parent"
@@ -73,7 +89,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="добавить"
+            android:backgroundTint="#165281"
             app:cornerRadius="8dp"
+            android:paddingVertical="8dp"
             android:textSize="22sp"
             android:textAllCaps="true"
             android:layout_marginTop="16dp"/>
