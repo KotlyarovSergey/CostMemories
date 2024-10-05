@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
@@ -26,7 +27,7 @@ import kotlinx.coroutines.launch
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-    private val dataViewModel : DataViewModel by viewModels()
+    private val dataViewModel : DataViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,7 +62,8 @@ class MainFragment : Fragment() {
     }
 
     private fun purchasesListHasChange(purchaseList: List<PurchaseTuple>){
-        val text = purchaseList.toString()
+//        val text = purchaseList.toString()
+        val text = purchaseList.reversed().joinToString("\n")
         binding.textView.text = text
     }
 

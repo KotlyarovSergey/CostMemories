@@ -35,5 +35,5 @@ data class Purchase(
     @ColumnInfo(name = "title_id") val titleId: Int,
     @ColumnInfo(name = "shop_id") val shopId: Int,
     val cost: Int,
-    val comment: String
+    val comment: String?
 )

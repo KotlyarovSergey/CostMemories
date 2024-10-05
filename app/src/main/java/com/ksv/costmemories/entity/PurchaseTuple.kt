@@ -1,5 +1,6 @@
 package com.ksv.costmemories.entity
 
+import android.text.util.Rfc822Token
 import androidx.room.ColumnInfo
 
 data class PurchaseTuple(
@@ -9,5 +10,16 @@ data class PurchaseTuple(
     val title: String,
     @ColumnInfo(name = "shop_name") val shop: String,
     val cost: Int,
-    val comment: String
-)
+    val comment: String?
+) {
+    override fun toString(): String {
+        val commentText = if(comment == null){
+            ""
+        } else{
+            "($comment)"
+        }
+
+//        val commentText = "($comment)" ?: ""
+        return "$id: $date: $product $title $shop ${cost}р. $commentText"
+    }
+}

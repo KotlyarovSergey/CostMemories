@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.ksv.costmemories.Dependencies
@@ -25,6 +27,7 @@ import java.util.Calendar
 class EditPurchaseFragment : Fragment() {
     private var _binding: FragmentEditPurchaseBinding? = null
     private val binding get() = _binding!!
+    private val dataViewModel : DataViewModel by activityViewModels()
 
     private var shops: List<Shop> = emptyList()
     private var products: List<Product> = emptyList()
@@ -56,15 +59,16 @@ class EditPurchaseFragment : Fragment() {
     private fun addButtonOnClickListener() {
         val purchase = checkFieldsAndGetPurchase()
         if (purchase != null) {
-            val purchasesDao = Dependencies.getPurchasesDao()
-            lifecycleScope.launch {
-                purchasesDao.insert(purchase)
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.add_purchase_success),
-                    Toast.LENGTH_SHORT
-                    ).show()
-            }
+            dataViewModel.addPurchase(purchase)
+//            val purchasesDao = Dependencies.getPurchasesDao()
+//            lifecycleScope.launch {
+//                purchasesDao.insert(purchase)
+//                Toast.makeText(
+//                    requireContext(),
+//                    getString(R.string.add_purchase_success),
+//                    Toast.LENGTH_SHORT
+//                    ).show()
+//            }
             parentFragmentManager.popBackStack()
         }
 
@@ -106,7 +110,7 @@ class EditPurchaseFragment : Fragment() {
             date = date,
             shopId = shop!!.id,
             cost = cost,
-            comment = comment!!,
+            comment = comment,
             productId = product!!.id,
             titleId = title.id
         )
@@ -146,7 +150,8 @@ class EditPurchaseFragment : Fragment() {
     }
 
     private fun checkComment(): String? {
-        return binding.comment.text.toString().trim()
+        val inputText = binding.comment.text.toString().trim()
+        return inputText.ifBlank { null }
     }
 
     private fun checkTitle(): Title? {
