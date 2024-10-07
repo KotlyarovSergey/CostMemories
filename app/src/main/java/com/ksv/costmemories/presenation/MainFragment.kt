@@ -6,19 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.ksv.costmemories.Dependencies
 import com.ksv.costmemories.R
 import com.ksv.costmemories.databinding.FragmentMainBinding
-import com.ksv.costmemories.entity.Product
 import com.ksv.costmemories.entity.PurchaseTuple
-import com.ksv.costmemories.entity.Shop
-import com.ksv.costmemories.entity.Title
 import com.ksv.costmemories.supporded.FillDb
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -33,6 +25,7 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        //Log.d("ksvlog", "MainFragment createdView")
         _binding = FragmentMainBinding.inflate(layoutInflater)
         return binding.root
     }
