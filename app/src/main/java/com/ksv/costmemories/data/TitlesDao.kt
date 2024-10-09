@@ -16,6 +16,9 @@ interface TitlesDao {
     @Query("SELECT * FROM titles WHERE text = :titleText")
     suspend fun getTitle(titleText: String): Title
 
+    @Query("SELECT id FROM titles WHERE text = :titleText")
+    suspend fun getTitleId(titleText: String): Int
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun inset(title: Title)
 

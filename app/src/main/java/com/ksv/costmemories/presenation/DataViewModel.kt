@@ -1,21 +1,16 @@
 package com.ksv.costmemories.presenation
 
-import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ksv.costmemories.Dependencies
-import com.ksv.costmemories.R
 import com.ksv.costmemories.entity.Product
 import com.ksv.costmemories.entity.Purchase
 import com.ksv.costmemories.entity.PurchaseTuple
 import com.ksv.costmemories.entity.Shop
 import com.ksv.costmemories.entity.Title
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlin.math.E
 
 
 class DataViewModel: ViewModel() {
@@ -32,7 +27,6 @@ class DataViewModel: ViewModel() {
     val state = _state.asStateFlow()
 
     init {
-        //Log.d("ksvlog", "vm init")
         viewModelScope.launch {
             _state.value = EditState.Waiting
             val purchasesDao = Dependencies.getPurchasesDao()
@@ -47,72 +41,100 @@ class DataViewModel: ViewModel() {
         }
     }
 
-    fun processUserInput(context: Context, userInputSet: UserInputSet){
-        val checkResult = checkUserInput(context, userInputSet)
-        if (checkResult is EditState.Error){
-            _state.value = checkResult
-        } else if (checkResult is EditState.Normal){
-            fillDb(userInputSet)
-        }
-    }
-
-    private fun checkUserInput(context: Context, userInputSet: UserInputSet) : EditState{
+    fun checkUserInput(userInputSet: UserInputSet): InputCheckResult{
         if(userInputSet.date.isBlank())
-            return EditState.Error(context.getString(R.string.date_input_error))
+            return InputCheckResult.EMPTY_DATE
         if(userInputSet.title.isBlank())
-            return EditState.Error(context.getString(R.string.empty_title_error))
-        if(userInputSet.cast.isBlank())
-            return EditState.Error(context.getString(R.string.cost_input_error))
+            return InputCheckResult.EMPTY_TITLE
+        if(userInputSet.cost.isBlank())
+            return InputCheckResult.EMPTY_COST
 
-        // another field can by Blank
-
-        return EditState.Normal
+        return InputCheckResult.OK
     }
 
-    private fun fillDb(userInputSet: UserInputSet){
+    fun fillDb(userInputSet: UserInputSet){
 
         viewModelScope.launch {
-            _state.value = EditState.Waiting
-            delay(2000)
-            _state.value = EditState.Finish
-        }
+            val date = userInputSet.date
+            val cost = userInputSet.cost.toInt()
+            val comment = userInputSet.comment.ifBlank { null }
 
+            // для Product, Shop и Title
+            // если новые добавить в БД, потом получить из БД его id
+            val productId = getProductId(userInputSet.product)
+            val titleId = getTitleId(userInputSet.title)
+            val shopId = getShopId(userInputSet.shop)
 
-    }
-
-    private fun addPurchase(purchase: Purchase){
-        viewModelScope.launch {
+            val purchase = Purchase(
+                date = date,
+                productId = productId,
+                titleId = titleId,
+                shopId = shopId,
+                cost = cost,
+                comment = comment
+            )
             val purchasesDao = Dependencies.getPurchasesDao()
             purchasesDao.insert(purchase)
             _purchases.value = purchasesDao.getAllAsTuple()
         }
     }
 
-
-
-    private fun addShop(shop: Shop){
-        viewModelScope.launch {
-            val shopsDao = Dependencies.getShopsDao()
-            shopsDao.insert(shop)
-            _shops.value = shopsDao.getAllShops()
-        }
+    private suspend fun getProductId(productName: String): Int {
+        return doesProductHaveId(productName) ?: insertProductInDbAndGetId(productName)
     }
 
-    private fun addTitle(title: Title){
-        viewModelScope.launch {
-            val titlesDao = Dependencies.getTitlesDao()
-            titlesDao.inset(title)
-            _titles.value = titlesDao.getAllTitles()
+    private fun doesProductHaveId(productName: String): Int?{
+        _products.value.forEach { product ->
+            if(product.name == productName){
+                return product.id
+            }
         }
+        return null
     }
 
-    private fun addProduct(product: Product){
-        viewModelScope.launch {
-            val productsDao = Dependencies.getProductsDao()
-            productsDao.insert(product)
-            _products.value = productsDao.getAllProducts()
-        }
+    private suspend fun insertProductInDbAndGetId(productName: String): Int{
+        val productsDao = Dependencies.getProductsDao()
+        productsDao.insert(Product(name = productName))
+        _products.value = productsDao.getAllProducts()
+        return productsDao.getProductId(productName)
     }
 
+    private suspend fun getTitleId(titleText: String): Int{
+        return doesTitleHaveId(titleText) ?: insertTitleInDbAndGetId(titleText)
+    }
 
+    private fun doesTitleHaveId(titleText: String): Int?{
+        _titles.value.forEach { title ->
+            if(title.text == titleText){
+                return title.id
+            }
+        }
+        return null
+    }
+
+    private suspend fun insertTitleInDbAndGetId(titleText: String): Int{
+        val titlesDao = Dependencies.getTitlesDao()
+        titlesDao.inset(Title(text = titleText))
+        _titles.value = titlesDao.getAllTitles()
+        return titlesDao.getTitleId(titleText)
+    }
+
+    private suspend fun getShopId(shopName: String): Int{
+        return doesShopHaveId(shopName) ?: insertShopInDbAndGetId(shopName)
+    }
+
+    private fun doesShopHaveId(shopName: String): Int?{
+        _shops.value.forEach { shop ->
+            if(shop.shop_name == shopName)
+                return shop.id
+        }
+        return null
+    }
+
+    private suspend fun insertShopInDbAndGetId(shopName: String): Int{
+        val shopDao = Dependencies.getShopsDao()
+        shopDao.insert(Shop(shop_name = shopName))
+        _shops.value = shopDao.getAllShops()
+        return shopDao.getShopId(shopName)
+    }
 }

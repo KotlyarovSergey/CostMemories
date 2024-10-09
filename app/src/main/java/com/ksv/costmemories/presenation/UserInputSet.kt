@@ -5,6 +5,6 @@ data class UserInputSet(
     val product: String,
     val title: String,
     val shop: String,
-    val cast: String,
+    val cost: String,
     val comment: String
 )

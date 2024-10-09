@@ -9,12 +9,19 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.ksv.costmemories.R
 import com.ksv.costmemories.databinding.FragmentEditPurchaseBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -22,7 +29,9 @@ import java.util.Calendar
 class EditPurchaseFragment : Fragment() {
     private var _binding: FragmentEditPurchaseBinding? = null
     private val binding get() = _binding!!
-    private val dataViewModel : DataViewModel by activityViewModels()
+    private val dataViewModel: DataViewModel by activityViewModels()
+
+    //private lateinit var navController: NavController
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,9 +54,10 @@ class EditPurchaseFragment : Fragment() {
         binding.dateEdit.setOnClickListener { dateEditOnClickListener() }
         binding.addButton.setOnClickListener { addButtonOnClickListener() }
         binding.testButton.setOnClickListener { testButtonOnClickListener() }
+        //navController = findNavController()
     }
 
-    private fun testButtonOnClickListener(){
+    private fun testButtonOnClickListener() {
 //        val shop = Shop(shop_name = binding.shop.text.toString().trim())
 //        dataViewModel.addShop(shop)
 //        val title = Title(text = binding.title.text.toString().trim())
@@ -55,9 +65,17 @@ class EditPurchaseFragment : Fragment() {
 //        val product = Product(name = binding.product.text.toString().trim())
 //        dataViewModel.addProduct(product)
 
+        //findNavController().popBackStack()
+        //dataViewModel.canClose()
+
+//        lifecycleScope.launch {
+//            delay(1000)
+//            findNavController().popBackStack()
+//        }
+
     }
 
-    private fun setDataHasChangeListeners(){
+    private fun setDataHasChangeListeners() {
         dataViewModel.shops.onEach { shops ->
             val shopsToList = shops.map { it.shop_name }
             binding.shop.setAdapter(
@@ -93,35 +111,77 @@ class EditPurchaseFragment : Fragment() {
 
         dataViewModel.state.onEach { state ->
             binding.progress.visibility = View.INVISIBLE
-            when(state){
+            when (state) {
                 is EditState.Error -> {
-                    Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
                 }
+
                 EditState.Finish -> {
-                    parentFragmentManager.popBackStack()
+                    //navController.popBackStack()
+                    //findNavController().popBackStack()
+//                    parentFragmentManager.popBackStack()
                 }
+
                 EditState.Normal -> {
                     binding.progress.visibility = View.INVISIBLE
                 }
+
                 EditState.Waiting -> {
                     binding.progress.visibility = View.VISIBLE
                 }
             }
         }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+//        dataViewModel.canClose.onEach { canClose ->
+//            if (canClose) {
+//                findNavController().popBackStack()
+//            }
+//        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+//        lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                dataViewModel.canClose.collect { canClose ->
+//                    if (canClose) {
+////                        findNavController().popBackStack()
+//                        findNavController().navigateUp()
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun addButtonOnClickListener() {
-        with(binding) {
-            val userInputSet = UserInputSet(
-                date = dateEdit.text.toString(),
-                product = product.text.toString(),
-                title = title.text.toString(),
-                shop = shop.text.toString(),
-                cast = cast.text.toString(),
-                comment = comment.text.toString()
+
+        val userInputSet = with(binding) {
+            UserInputSet(
+                date = dateEdit.text.toString().trim(),
+                product = product.text.toString().trim(),
+                title = title.text.toString().trim(),
+                shop = shop.text.toString().trim(),
+                cost = cost.text.toString().trim(),
+                comment = comment.text.toString().trim()
             )
-            dataViewModel.processUserInput(requireContext(), userInputSet)
         }
+        val checkResult = dataViewModel.checkUserInput(userInputSet)
+        when(checkResult){
+            InputCheckResult.OK -> {
+//                dataViewModel.processUserInput(requireContext(), userInputSet)
+                dataViewModel.fillDb(userInputSet)
+                findNavController().popBackStack()
+            }
+            InputCheckResult.EMPTY_DATE -> {
+                Toast.makeText(requireContext(), getString(R.string.date_input_error), Toast.LENGTH_SHORT).show()
+            }
+            InputCheckResult.EMPTY_COST -> {
+                Toast.makeText(requireContext(), getString(R.string.cost_input_error), Toast.LENGTH_SHORT).show()
+            }
+            InputCheckResult.EMPTY_TITLE -> {
+                Toast.makeText(requireContext(), getString(R.string.empty_title_error), Toast.LENGTH_SHORT).show()
+            }
+            InputCheckResult.UNKNOWN -> { }
+        }
+
+
     }
 
     private fun setDate() {

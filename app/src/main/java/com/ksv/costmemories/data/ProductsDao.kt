@@ -13,6 +13,12 @@ interface ProductsDao {
     @Query("SELECT * FROM products")
     suspend fun getAllProducts(): List<Product>
 
+    @Query("SELECT * FROM products WHERE name=:productName")
+    suspend fun getProduct(productName: String): Product
+
+    @Query("SELECT id FROM products WHERE name=:productName")
+    suspend fun getProductId(productName: String): Int
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(product: Product)
 
