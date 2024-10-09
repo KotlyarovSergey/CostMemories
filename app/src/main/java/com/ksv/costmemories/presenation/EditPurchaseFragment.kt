@@ -31,8 +31,6 @@ class EditPurchaseFragment : Fragment() {
     private val binding get() = _binding!!
     private val dataViewModel: DataViewModel by activityViewModels()
 
-    //private lateinit var navController: NavController
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,26 +51,6 @@ class EditPurchaseFragment : Fragment() {
         setDate()
         binding.dateEdit.setOnClickListener { dateEditOnClickListener() }
         binding.addButton.setOnClickListener { addButtonOnClickListener() }
-        binding.testButton.setOnClickListener { testButtonOnClickListener() }
-        //navController = findNavController()
-    }
-
-    private fun testButtonOnClickListener() {
-//        val shop = Shop(shop_name = binding.shop.text.toString().trim())
-//        dataViewModel.addShop(shop)
-//        val title = Title(text = binding.title.text.toString().trim())
-//        dataViewModel.addTitle(title)
-//        val product = Product(name = binding.product.text.toString().trim())
-//        dataViewModel.addProduct(product)
-
-        //findNavController().popBackStack()
-        //dataViewModel.canClose()
-
-//        lifecycleScope.launch {
-//            delay(1000)
-//            findNavController().popBackStack()
-//        }
-
     }
 
     private fun setDataHasChangeListeners() {
@@ -117,9 +95,7 @@ class EditPurchaseFragment : Fragment() {
                 }
 
                 EditState.Finish -> {
-                    //navController.popBackStack()
                     //findNavController().popBackStack()
-//                    parentFragmentManager.popBackStack()
                 }
 
                 EditState.Normal -> {
@@ -131,27 +107,9 @@ class EditPurchaseFragment : Fragment() {
                 }
             }
         }.launchIn(viewLifecycleOwner.lifecycleScope)
-
-//        dataViewModel.canClose.onEach { canClose ->
-//            if (canClose) {
-//                findNavController().popBackStack()
-//            }
-//        }.launchIn(viewLifecycleOwner.lifecycleScope)
-
-//        lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                dataViewModel.canClose.collect { canClose ->
-//                    if (canClose) {
-////                        findNavController().popBackStack()
-//                        findNavController().navigateUp()
-//                    }
-//                }
-//            }
-//        }
     }
 
     private fun addButtonOnClickListener() {
-
         val userInputSet = with(binding) {
             UserInputSet(
                 date = dateEdit.text.toString().trim(),
@@ -165,7 +123,6 @@ class EditPurchaseFragment : Fragment() {
         val checkResult = dataViewModel.checkUserInput(userInputSet)
         when(checkResult){
             InputCheckResult.OK -> {
-//                dataViewModel.processUserInput(requireContext(), userInputSet)
                 dataViewModel.fillDb(userInputSet)
                 findNavController().popBackStack()
             }
@@ -180,8 +137,6 @@ class EditPurchaseFragment : Fragment() {
             }
             InputCheckResult.UNKNOWN -> { }
         }
-
-
     }
 
     private fun setDate() {
@@ -216,5 +171,4 @@ class EditPurchaseFragment : Fragment() {
         val formattedText = LocalDate.of(year, month, day).format(formatter)
         return formattedText
     }
-
 }

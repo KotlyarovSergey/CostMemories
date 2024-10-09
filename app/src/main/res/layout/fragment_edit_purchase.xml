@@ -93,12 +93,6 @@
                     android:textSize="22sp"
                     app:cornerRadius="8dp" />
 
-                <Button
-                    android:id="@+id/test_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="TEST" />
-
             </LinearLayout>
         </ScrollView>
 
