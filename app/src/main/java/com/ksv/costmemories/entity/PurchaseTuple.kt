@@ -7,7 +7,8 @@ data class PurchaseTuple(
     val date: String,
     val cost: Int,
     val comment: String?,
-    @ColumnInfo(name = "product_name") val product: String,
+//    @ColumnInfo(name = "product_name") val product: String,
+    val product: String,
     val title: String,
     @ColumnInfo(name = "shop_name") val shop: String,
 ) {

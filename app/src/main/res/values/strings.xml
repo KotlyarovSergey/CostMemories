@@ -5,4 +5,5 @@
     <string name="date_input_error">Неверная дата</string>
     <string name="cost_input_error">Введите цену</string>
     <string name="add_purchase_success">Покупка добавлена</string>
+    <string name="cost_pattern">%dр</string>
 </resources>

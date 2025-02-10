@@ -21,7 +21,7 @@ interface PurchasesDao {
                 "date, " +
                 "cost, " +
                 "comment, " +
-                "product_groups.group_name AS product_name, " +
+                "product_groups.group_name AS product, " +
                 "product_titles.title AS title, " +
                 "shops.shop_name AS shop_name, " +
                 "comment " +
@@ -36,7 +36,7 @@ interface PurchasesDao {
             "date, " +
             "cost, " +
             "comment, " +
-            "product_groups.group_name AS product_name, " +
+            "product_groups.group_name AS product, " +
             "product_titles.title AS title, " +
             "shops.shop_name AS shop_name, " +
             "comment " +
