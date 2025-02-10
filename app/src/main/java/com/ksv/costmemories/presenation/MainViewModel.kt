@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 
-class DataViewModel: ViewModel() {
+class MainViewModel: ViewModel() {
     private val _purchases = MutableStateFlow<List<PurchaseTuple>>(emptyList())
     val purchase = _purchases.asStateFlow()
     private val _shops = MutableStateFlow<List<Shop>>(emptyList())
@@ -41,7 +41,7 @@ class DataViewModel: ViewModel() {
         }
     }
 
-    fun checkUserInput(userInputSet: UserInputSet): InputCheckResult{
+    fun checkUserInput(userInputSet: UserInputSet): InputCheckResult {
         if(userInputSet.date.isBlank())
             return InputCheckResult.EMPTY_DATE
         if(userInputSet.title.isBlank())

@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.ksv.costmemories.presenation.MainFragment"
+        android:name="com.ksv.costmemories.ui.home.view.HomeFragment"
         android:label="MainFragment" >
         <action
             android:id="@+id/action_mainFragment_to_editPurchaseFragment"

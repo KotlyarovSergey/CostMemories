@@ -22,7 +22,7 @@ import java.util.Calendar
 class EditPurchaseFragment : Fragment() {
     private var _binding: FragmentEditPurchaseBinding? = null
     private val binding get() = _binding!!
-    private val dataViewModel: DataViewModel by activityViewModels()
+    private val dataViewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

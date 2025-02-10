@@ -8,7 +8,7 @@
         android:orientation="vertical"
         android:gravity="center"
         android:padding="16dp"
-        tools:context=".presenation.MainFragment">
+        tools:context=".ui.home.view.HomeFragment">
 
         <TextView
             android:id="@+id/text_view"

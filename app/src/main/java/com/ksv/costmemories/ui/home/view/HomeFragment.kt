@@ -1,4 +1,4 @@
-package com.ksv.costmemories.presenation
+package com.ksv.costmemories.ui.home.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,27 +6,36 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.ksv.costmemories.Dependencies
 import com.ksv.costmemories.R
-import com.ksv.costmemories.databinding.FragmentMainBinding
+import com.ksv.costmemories.databinding.FragmentHomeBinding
 import com.ksv.costmemories.entity.PurchaseTuple
+import com.ksv.costmemories.presenation.MainViewModel
 import com.ksv.costmemories.supporded.FillDb
+import com.ksv.costmemories.ui.home.model.HomeViewModel
+import com.ksv.costmemories.ui.home.model.HomeViewModelFactory
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class MainFragment : Fragment() {
-    private var _binding: FragmentMainBinding? = null
+class HomeFragment : Fragment() {
+    private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val dataViewModel : DataViewModel by activityViewModels()
+    //private val dataViewModel : MainViewModel by activityViewModels()
+    private val viewModel: HomeViewModel by viewModels {
+        HomeViewModelFactory(Dependencies.getPurchasesDao())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         //Log.d("ksvlog", "MainFragment createdView")
-        _binding = FragmentMainBinding.inflate(layoutInflater)
+        _binding = FragmentHomeBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -48,7 +57,13 @@ class MainFragment : Fragment() {
             }
         }
 
-        dataViewModel.purchase.onEach { purchasesList ->
+//        dataViewModel.purchase.onEach { purchasesList ->
+//            purchasesListHasChange(purchasesList)
+//        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+
+        //viewModel.setFilter("саль")
+        viewModel.purchases.onEach { purchasesList ->
             purchasesListHasChange(purchasesList)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
