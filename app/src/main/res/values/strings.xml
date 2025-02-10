@@ -6,4 +6,5 @@
     <string name="cost_input_error">Введите цену</string>
     <string name="add_purchase_success">Покупка добавлена</string>
     <string name="cost_pattern">%dр</string>
+    <string name="add_button_description">добавить покупку</string>
 </resources>

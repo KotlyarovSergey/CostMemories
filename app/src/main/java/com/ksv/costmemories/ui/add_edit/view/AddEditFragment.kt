@@ -1,4 +1,4 @@
-package com.ksv.costmemories.presenation
+package com.ksv.costmemories.ui.add_edit.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,15 +12,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.ksv.costmemories.R
-import com.ksv.costmemories.databinding.FragmentEditPurchaseBinding
+import com.ksv.costmemories.databinding.FragmentAddEditBinding
+import com.ksv.costmemories.presenation.EditState
+import com.ksv.costmemories.presenation.InputCheckResult
+import com.ksv.costmemories.presenation.MainViewModel
+import com.ksv.costmemories.presenation.UserInputSet
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
-class EditPurchaseFragment : Fragment() {
-    private var _binding: FragmentEditPurchaseBinding? = null
+class AddEditFragment : Fragment() {
+    private var _binding: FragmentAddEditBinding? = null
     private val binding get() = _binding!!
     private val dataViewModel: MainViewModel by activityViewModels()
 
@@ -28,7 +32,7 @@ class EditPurchaseFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentEditPurchaseBinding.inflate(layoutInflater)
+        _binding = FragmentAddEditBinding.inflate(layoutInflater)
         return binding.root
     }
 

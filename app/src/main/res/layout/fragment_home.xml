@@ -1,43 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="16dp"
-        tools:context=".ui.home.view.HomeFragment">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            tools:itemCount="4"
-            tools:listitem="@layout/purchase_view"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_weight="1.1"/>
-
-        <Button
-            android:id="@+id/edit_purchase_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="ADD/EDIT PURCHASE" />
-
-
-        <Button
-            android:id="@+id/fill_db"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="FILL DB" />
-
-
-    </LinearLayout>
     <data>
 
     </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.home.view.HomeFragment">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="4"
+                tools:listitem="@layout/purchase_view" />
+
+        </ScrollView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="42dp"
+            android:backgroundTint="?attr/colorPrimary"
+            android:contentDescription="@string/add_button_description"
+            android:src="@drawable/icon_add"
+            app:maxImageSize="42dp"
+            app:shapeAppearance="?attr/shapeAppearance"
+            app:tint="#FFFFFF"
+            tools:visibility="visible" />
+
+    </FrameLayout>
+
 </layout>

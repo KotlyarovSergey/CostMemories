@@ -53,34 +53,23 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recycler.adapter = adapter
 
-        binding.editPurchaseButton.setOnClickListener {
+        binding.addButton.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment_to_editPurchaseFragment)
         }
 
-        binding.fillDb.setOnClickListener {
-            lifecycleScope.launch {
-                FillDb.fill()
-            }
-        }
-
-//        dataViewModel.purchase.onEach { purchasesList ->
-//            purchasesListHasChange(purchasesList)
-//        }.launchIn(viewLifecycleOwner.lifecycleScope)
+//        binding.fillDb.setOnClickListener {
+//            lifecycleScope.launch {
+//                FillDb.fill()
+//            }
+//        }
 
 
         //viewModel.setFilter("саль")
         viewModel.purchases.onEach { purchasesList ->
-            //purchasesListHasChange(purchasesList)
-            Log.d("ksvlog", purchasesList.toString())
+//            Log.d("ksvlog", purchasesList.toString())
             adapter.submitList(purchasesList)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
-    }
-
-    private fun purchasesListHasChange(purchaseList: List<PurchaseTuple>){
-//        val text = purchaseList.toString()
-        val text = purchaseList.reversed().joinToString("\n")
-        //binding.textView.text = text
     }
 
     private fun onItemClick(id: Long){
