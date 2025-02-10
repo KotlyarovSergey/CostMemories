@@ -4,9 +4,9 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "products",
-    indices = [Index(value = ["name"], unique = true)])
+@Entity(tableName = "product_titles",
+    indices = [Index(value = ["title"], unique = true)])
 data class Product(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val name: String
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val title: String
 )

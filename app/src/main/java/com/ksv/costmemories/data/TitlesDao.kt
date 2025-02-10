@@ -6,26 +6,26 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.ksv.costmemories.entity.Title
+import com.ksv.costmemories.entity.Product
 
 @Dao
 interface TitlesDao {
-    @Query("SELECT * FROM titles")
-    suspend fun getAllTitles(): List<Title>
+    @Query("SELECT * FROM product_titles")
+    suspend fun getAllTitles(): List<Product>
 
-    @Query("SELECT * FROM titles WHERE text = :titleText")
-    suspend fun getTitle(titleText: String): Title
+    @Query("SELECT * FROM product_titles WHERE title = :title")
+    suspend fun getTitle(title: String): Product
 
-    @Query("SELECT id FROM titles WHERE text = :titleText")
-    suspend fun getTitleId(titleText: String): Int
+    @Query("SELECT id FROM product_titles WHERE title = :title")
+    suspend fun getTitleId(title: String): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun inset(title: Title)
+    suspend fun inset(title: Product)
 
     @Update
-    suspend fun update(title: Title)
+    suspend fun update(title: Product)
 
     @Delete
-    suspend fun delete(title: Title)
+    suspend fun delete(title: Product)
 
 }

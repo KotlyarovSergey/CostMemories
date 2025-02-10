@@ -16,12 +16,12 @@ import androidx.room.PrimaryKey
             childColumns = ["shop_id"]
         ),
         ForeignKey(
-            entity = Product::class,
+            entity = Group::class,
             parentColumns = ["id"],
             childColumns = ["product_id"]
         ),
         ForeignKey(
-            entity = Title::class,
+            entity = Product::class,
             parentColumns = ["id"],
             childColumns = ["title_id"]
         )
@@ -31,9 +31,9 @@ import androidx.room.PrimaryKey
 data class Purchase(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val date: String,
-    @ColumnInfo(name = "product_id") val productId: Int,
-    @ColumnInfo(name = "title_id") val titleId: Int,
-    @ColumnInfo(name = "shop_id") val shopId: Int,
+    @ColumnInfo(name = "product_id") val productId: Long,
+    @ColumnInfo(name = "title_id") val titleId: Long,
+    @ColumnInfo(name = "shop_id") val shopId: Long,
     val cost: Int,
     val comment: String?
 )

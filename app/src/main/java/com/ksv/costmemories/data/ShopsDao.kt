@@ -14,7 +14,7 @@ interface ShopsDao {
     suspend fun getAllShops(): List<Shop>
 
     @Query("SELECT id FROM shops WHERE shop_name=:shopName")
-    suspend fun getShopId(shopName: String): Int
+    suspend fun getShopId(shopName: String): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(shop: Shop)

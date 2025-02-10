@@ -15,10 +15,18 @@ interface PurchasesDao {
     @Query("SELECT * FROM purchases")
     suspend fun getAll(): List<Purchase>
 
-    @Query("SELECT purchases.id, date, cost, comment, products.name AS product_name, " +
-            "titles.text AS title, shops.shop_name AS shop_name, comment FROM purchases " +
-            "INNER JOIN products ON purchases.product_id = products.id " +
-            "INNER JOIN titles ON purchases.title_id = titles.id " +
+    @Query("SELECT " +
+                "purchases.id, " +
+                "date, " +
+                "cost, " +
+                "comment, " +
+                "product_groups.group_name AS product_name, " +
+                "product_titles.title AS title, " +
+                "shops.shop_name AS shop_name, " +
+                "comment " +
+            "FROM purchases " +
+            "INNER JOIN product_groups ON purchases.product_id = product_groups.id " +
+            "INNER JOIN product_titles ON purchases.title_id = product_titles.id " +
             "INNER JOIN shops ON purchases.shop_id = shops.id")
     suspend fun getAllAsTuple(): List<PurchaseTuple>
 

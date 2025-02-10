@@ -1,7 +1,6 @@
 package com.ksv.costmemories.presenation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,19 +8,13 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.ksv.costmemories.R
 import com.ksv.costmemories.databinding.FragmentEditPurchaseBinding
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -66,7 +59,7 @@ class EditPurchaseFragment : Fragment() {
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         dataViewModel.titles.onEach { titles ->
-            val titlesToList = titles.map { it.text }
+            val titlesToList = titles.map { it.title }
             binding.title.setAdapter(
                 ArrayAdapter(
                     requireContext(),
@@ -77,7 +70,7 @@ class EditPurchaseFragment : Fragment() {
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         dataViewModel.products.onEach { products ->
-            val productsToList = products.map { it.name }
+            val productsToList = products.map { it.group }
             binding.product.setAdapter(
                 ArrayAdapter(
                     requireContext(),
@@ -146,6 +139,7 @@ class EditPurchaseFragment : Fragment() {
     private fun dateEditOnClickListener() {
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText(resources.getText(R.string.date_picker_title))
+            .setSelection(Calendar.getInstance().timeInMillis)
             .build()
 
         datePicker.addOnPositiveButtonClickListener { timeInMills ->

@@ -3,11 +3,11 @@ package com.ksv.costmemories.presenation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ksv.costmemories.Dependencies
-import com.ksv.costmemories.entity.Product
+import com.ksv.costmemories.entity.Group
 import com.ksv.costmemories.entity.Purchase
 import com.ksv.costmemories.entity.PurchaseTuple
 import com.ksv.costmemories.entity.Shop
-import com.ksv.costmemories.entity.Title
+import com.ksv.costmemories.entity.Product
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -18,9 +18,9 @@ class DataViewModel: ViewModel() {
     val purchase = _purchases.asStateFlow()
     private val _shops = MutableStateFlow<List<Shop>>(emptyList())
     val shops = _shops.asStateFlow()
-    private val _titles = MutableStateFlow<List<Title>>(emptyList())
+    private val _titles = MutableStateFlow<List<Product>>(emptyList())
     val titles = _titles.asStateFlow()
-    private val _products = MutableStateFlow<List<Product>>(emptyList())
+    private val _products = MutableStateFlow<List<Group>>(emptyList())
     val products = _products.asStateFlow()
 
     private val _state = MutableStateFlow<EditState>(EditState.Normal)
@@ -79,51 +79,51 @@ class DataViewModel: ViewModel() {
         }
     }
 
-    private suspend fun getProductId(productName: String): Int {
+    private suspend fun getProductId(productName: String): Long {
         return doesProductHaveId(productName) ?: insertProductInDbAndGetId(productName)
     }
 
-    private fun doesProductHaveId(productName: String): Int?{
+    private fun doesProductHaveId(productName: String): Long?{
         _products.value.forEach { product ->
-            if(product.name == productName){
+            if(product.group == productName){
                 return product.id
             }
         }
         return null
     }
 
-    private suspend fun insertProductInDbAndGetId(productName: String): Int{
+    private suspend fun insertProductInDbAndGetId(productName: String): Long{
         val productsDao = Dependencies.getProductsDao()
-        productsDao.insert(Product(name = productName))
+        productsDao.insert(Group(group = productName))
         _products.value = productsDao.getAllProducts()
         return productsDao.getProductId(productName)
     }
 
-    private suspend fun getTitleId(titleText: String): Int{
+    private suspend fun getTitleId(titleText: String): Long{
         return doesTitleHaveId(titleText) ?: insertTitleInDbAndGetId(titleText)
     }
 
-    private fun doesTitleHaveId(titleText: String): Int?{
+    private fun doesTitleHaveId(titleText: String): Long?{
         _titles.value.forEach { title ->
-            if(title.text == titleText){
+            if(title.title == titleText){
                 return title.id
             }
         }
         return null
     }
 
-    private suspend fun insertTitleInDbAndGetId(titleText: String): Int{
+    private suspend fun insertTitleInDbAndGetId(titleText: String): Long{
         val titlesDao = Dependencies.getTitlesDao()
-        titlesDao.inset(Title(text = titleText))
+        titlesDao.inset(Product(title = titleText))
         _titles.value = titlesDao.getAllTitles()
         return titlesDao.getTitleId(titleText)
     }
 
-    private suspend fun getShopId(shopName: String): Int{
+    private suspend fun getShopId(shopName: String): Long{
         return doesShopHaveId(shopName) ?: insertShopInDbAndGetId(shopName)
     }
 
-    private fun doesShopHaveId(shopName: String): Int?{
+    private fun doesShopHaveId(shopName: String): Long?{
         _shops.value.forEach { shop ->
             if(shop.shop_name == shopName)
                 return shop.id
@@ -131,7 +131,7 @@ class DataViewModel: ViewModel() {
         return null
     }
 
-    private suspend fun insertShopInDbAndGetId(shopName: String): Int{
+    private suspend fun insertShopInDbAndGetId(shopName: String): Long{
         val shopDao = Dependencies.getShopsDao()
         shopDao.insert(Shop(shop_name = shopName))
         _shops.value = shopDao.getAllShops()
