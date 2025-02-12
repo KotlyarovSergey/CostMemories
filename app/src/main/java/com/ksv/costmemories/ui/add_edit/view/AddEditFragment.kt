@@ -43,11 +43,19 @@ class AddEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setDataHasChangeListeners()
+        val newPurchase = AddEditFragmentArgs.fromBundle(requireArguments()).newPurchase
+        val id = AddEditFragmentArgs.fromBundle(requireArguments()).id
 
-        setDate()
-        binding.dateEdit.setOnClickListener { dateEditOnClickListener() }
-        binding.addButton.setOnClickListener { addButtonOnClickListener() }
+        binding.product.setText("new: $newPurchase")
+        binding.title.setText("id: $id")
+
+//
+//
+//        setDataHasChangeListeners()
+//
+//        setDate()
+//        binding.dateEdit.setOnClickListener { dateEditOnClickListener() }
+//        binding.addButton.setOnClickListener { addButtonOnClickListener() }
     }
 
     private fun setDataHasChangeListeners() {

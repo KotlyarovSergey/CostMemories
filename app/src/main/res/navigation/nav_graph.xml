@@ -17,7 +17,7 @@
         android:name="com.ksv.costmemories.ui.add_edit.view.AddEditFragment"
         android:label="EditPurchaseFragment" >
         <argument
-            android:name="purchaseId"
+            android:name="id"
             app:argType="long"
             android:defaultValue="-1L" />
         <argument

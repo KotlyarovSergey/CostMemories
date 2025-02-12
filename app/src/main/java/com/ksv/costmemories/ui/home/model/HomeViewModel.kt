@@ -39,13 +39,16 @@ class HomeViewModel(
     }
 
     fun onItemClick(id: Long){
-
+        _state.value = HomeState.EditPurchase(id)
     }
 
     fun onAddPurchaseClick(){
-
+        _state.value = HomeState.AddPurchase
     }
 
+    fun onAddEditFragmentWasOpened(){
+        _state.value = if(purchases.value.isEmpty()) HomeState.Empty else HomeState.Normal
+    }
 
 
     private fun filter(purchases: List<PurchaseTuple>): List<PurchaseTuple>{
