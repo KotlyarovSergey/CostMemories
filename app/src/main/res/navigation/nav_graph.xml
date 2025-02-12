@@ -9,11 +9,19 @@
         android:name="com.ksv.costmemories.ui.home.view.HomeFragment"
         android:label="HomeFragment" >
         <action
-            android:id="@+id/action_mainFragment_to_editPurchaseFragment"
-            app:destination="@id/editPurchaseFragment" />
+            android:id="@+id/action_mainFragment_to_addEditFragment"
+            app:destination="@id/addEditFragment" />
     </fragment>
     <fragment
-        android:id="@+id/editPurchaseFragment"
+        android:id="@+id/addEditFragment"
         android:name="com.ksv.costmemories.ui.add_edit.view.AddEditFragment"
-        android:label="EditPurchaseFragment" />
+        android:label="EditPurchaseFragment" >
+        <argument
+            android:name="purchaseId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument
+            android:name="newPurchase"
+            app:argType="boolean" />
+    </fragment>
 </navigation>

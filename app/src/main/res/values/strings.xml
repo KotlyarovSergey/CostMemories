@@ -7,4 +7,6 @@
     <string name="add_purchase_success">Покупка добавлена</string>
     <string name="cost_pattern">%dр</string>
     <string name="add_button_description">добавить покупку</string>
+    <string name="empty_purchases_list_caption">Пусто</string>
+    <string name="empty_purchases_list_hint">измените фильтр или добавьте покупку</string>
 </resources>
