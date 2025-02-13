@@ -1,7 +1,6 @@
 package com.ksv.costmemories.ui.home.view
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -62,19 +61,17 @@ class HomeFragment : Fragment() {
         viewModel.state.onEach { state ->
             when (state) {
                 is HomeState.AddPurchase -> {
-                    val action =
-                        HomeFragmentDirections.actionMainFragmentToAddEditFragment(newPurchase = true)
-                    findNavController().navigate(action)
-                    viewModel.onAddEditFragmentWasOpened()
+                    findNavController().navigate(R.id.action_homeFragment_to_addPurchaseFragment)
+                    viewModel.onAddPurchaseFragmentNavigate()
                 }
 
                 is HomeState.EditPurchase -> {
-                    val action = HomeFragmentDirections.actionMainFragmentToAddEditFragment(
-                        newPurchase = false,
-                        id = state.id
-                    )
-                    findNavController().navigate(action)
-                    viewModel.onAddEditFragmentWasOpened()
+//                    val action = HomeFragmentDirections.actionMainFragmentToAddEditFragment(
+//                        newPurchase = false,
+//                        id = state.id
+//                    )
+//                    findNavController().navigate(action)
+                    viewModel.onEditPurchaseFragmentNavigate()
                 }
 
                 else -> {}

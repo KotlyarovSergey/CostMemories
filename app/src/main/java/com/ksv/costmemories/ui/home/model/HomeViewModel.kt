@@ -46,7 +46,11 @@ class HomeViewModel(
         _state.value = HomeState.AddPurchase
     }
 
-    fun onAddEditFragmentWasOpened(){
+    fun onAddPurchaseFragmentNavigate(){
+        _state.value = if(purchases.value.isEmpty()) HomeState.Empty else HomeState.Normal
+    }
+
+    fun onEditPurchaseFragmentNavigate(){
         _state.value = if(purchases.value.isEmpty()) HomeState.Empty else HomeState.Normal
     }
 
