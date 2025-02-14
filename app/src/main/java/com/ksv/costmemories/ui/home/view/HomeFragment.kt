@@ -66,11 +66,8 @@ class HomeFragment : Fragment() {
                 }
 
                 is HomeState.EditPurchase -> {
-//                    val action = HomeFragmentDirections.actionMainFragmentToAddEditFragment(
-//                        newPurchase = false,
-//                        id = state.id
-//                    )
-//                    findNavController().navigate(action)
+                    val action = HomeFragmentDirections.actionHomeFragmentToEditPurchaseFragment(state.id)
+                    findNavController().navigate(action)
                     viewModel.onEditPurchaseFragmentNavigate()
                 }
 

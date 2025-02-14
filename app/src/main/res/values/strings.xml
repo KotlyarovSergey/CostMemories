@@ -1,12 +1,27 @@
 <resources>
     <string name="app_name">CostMemories</string>
+
     <string name="date_picker_title">Дата покупки</string>
+
     <string name="empty_title_error">Название не может быть пустым</string>
     <string name="date_input_error">Неверная дата</string>
     <string name="cost_input_error">Введите цену</string>
-    <string name="add_purchase_success">Покупка добавлена</string>
+
     <string name="cost_pattern">%dр</string>
     <string name="add_button_description">добавить покупку</string>
     <string name="empty_purchases_list_caption">Пусто</string>
     <string name="empty_purchases_list_hint">измените фильтр или добавьте покупку</string>
+
+    <string name="date_edit_hint">Дата</string>
+    <string name="product_edit_hint">Продукт</string>
+    <string name="title_edit_hint">Название</string>
+    <string name="shop_edit_hint">Место покупки</string>
+    <string name="cost_edit_hint">Цена</string>
+    <string name="comment_edit_hint">Доп. информация</string>
+
+    <string name="edit_purchase_caption">Редактировать</string>
+    <string name="purchase_edit_save">Сохранить</string>
+
+
+    <string name="add_purchase_success">Покупка добавлена</string>
 </resources>

@@ -66,6 +66,15 @@ interface PurchasesDao {
             "WHERE purchases.id=:id")
     suspend fun getPurchase(id: Long): PurchaseTuple
 
+    @Query("SELECT purchases.id, date, cost, comment, product_groups.group_name AS product, " +
+            "product_titles.title AS title, shops.shop_name AS shop_name, comment " +
+            "FROM purchases " +
+            "INNER JOIN product_groups ON purchases.product_id = product_groups.id " +
+            "INNER JOIN product_titles ON purchases.title_id = product_titles.id " +
+            "INNER JOIN shops ON purchases.shop_id = shops.id " +
+            "WHERE purchases.id=:id")
+    fun purchaseOnId(id: Long): Flow<PurchaseTuple>
+
 
     @Insert
     suspend fun insert(purchase: Purchase)
