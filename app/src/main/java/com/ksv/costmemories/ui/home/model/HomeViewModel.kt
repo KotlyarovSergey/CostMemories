@@ -14,11 +14,11 @@ import kotlinx.coroutines.flow.stateIn
 class HomeViewModel(
     purchasesDao: PurchasesDao
 ): ViewModel() {
-    private val _purchases = purchasesDao.getAllFlow()
-    val purchases = _purchases
-        .map { filter(it) }
+    private val _purchasesDB = purchasesDao.getAllFlow()
         .onEach {
-            _state.value = if(it.isEmpty()) HomeState.Empty else HomeState.Normal
+            _purchases.value = filter(it)
+//            _state.value = if(it.isEmpty()) HomeState.Empty else HomeState.Normal
+            _state.value = if(_purchases.value.isEmpty()) HomeState.Empty else HomeState.Normal
         }
         .stateIn(
             scope = viewModelScope,
@@ -26,8 +26,15 @@ class HomeViewModel(
             initialValue = emptyList()
         )
 
+    private val _purchases = MutableStateFlow<List<PurchaseTuple>>(emptyList())
+    val purchases = _purchases.asStateFlow()
+
+//        .onEach {
+//            _state.value = if(it.isEmpty()) HomeState.Empty else HomeState.Normal
+//        }
     private val _state = MutableStateFlow<HomeState>(HomeState.Normal)
     val state = _state.asStateFlow()
+
 
 
     private var _filterSequence: String = ""
@@ -54,6 +61,11 @@ class HomeViewModel(
         _state.value = if(purchases.value.isEmpty()) HomeState.Empty else HomeState.Normal
     }
 
+    fun onFilterTextChanged(ch: CharSequence){
+        _filterSequence = ch.toString()
+        _purchases.value = filter(_purchasesDB.value)
+        _state.value = if(_purchases.value.isEmpty()) HomeState.Empty else HomeState.Normal
+    }
 
     private fun filter(purchases: List<PurchaseTuple>): List<PurchaseTuple>{
         val filtered = purchases
