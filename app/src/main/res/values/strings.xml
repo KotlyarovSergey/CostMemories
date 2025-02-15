@@ -24,4 +24,6 @@
 
 
     <string name="add_purchase_success">Покупка добавлена</string>
+    <string name="new_purchase_caption">Новая покупка</string>
+    <string name="button_add_caption">добавить</string>
 </resources>

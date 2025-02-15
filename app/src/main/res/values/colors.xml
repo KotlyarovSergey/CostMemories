@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primary">#165281</color>
+    <color name="edit_purchase_background">#F2F2C3</color>
+    <color name="purchase_card_background_tint">#C6F4FA</color>
+    <color name="home_background">#183850</color>
 </resources>

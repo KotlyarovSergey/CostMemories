@@ -4,4 +4,5 @@ sealed class AddState {
     data object Normal: AddState()
     class Error(val msg: String): AddState()
     data object Finish: AddState()
+    data object SetDate: AddState()
 }

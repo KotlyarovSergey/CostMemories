@@ -50,9 +50,6 @@ class AddPurchaseFragment : Fragment() {
 
         fillAutoCompleteData()
 
-        binding.date.setOnClickListener { onDateClickListener() }
-        binding.addButton.setOnClickListener { viewModel.onAddClick() }
-
         viewModel.state.onEach { state ->
             when (state) {
                 AddState.Finish -> {
@@ -62,6 +59,10 @@ class AddPurchaseFragment : Fragment() {
                 is AddState.Error -> {
 //                    Toast.makeText(requireContext(), getString(R.string.date_input_error), Toast.LENGTH_SHORT).show()
                     Toast.makeText(requireContext(), state.msg, Toast.LENGTH_SHORT).show()
+                }
+                AddState.SetDate -> {
+                    openDateDialog()
+                    viewModel.onDateDialogOpen()
                 }
                 else -> {}
             }
@@ -104,7 +105,7 @@ class AddPurchaseFragment : Fragment() {
 
     }
 
-    private fun onDateClickListener() {
+    private fun openDateDialog() {
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText(resources.getText(R.string.date_picker_title))
             .setSelection(Calendar.getInstance().timeInMillis)

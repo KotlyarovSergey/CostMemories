@@ -58,7 +58,15 @@ class AddPurchaseViewModel(
         }
     }
 
+    fun onDateClick(){
+        _state.value = AddState.SetDate
+    }
+
     fun onHomeFragmentNavigate(){
+        _state.value = AddState.Normal
+    }
+
+    fun onDateDialogOpen(){
         _state.value = AddState.Normal
     }
 

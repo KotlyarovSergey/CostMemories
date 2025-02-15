@@ -7,6 +7,7 @@
         <variable
             name="purchase"
             type="com.ksv.costmemories.entity.PurchaseTuple" />
+        <import type="android.view.View"/>
     </data>
 
     <FrameLayout
@@ -19,7 +20,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/card"
             app:cardCornerRadius="8dp"
-            app:cardBackgroundColor="#F6BEBE"
+            app:cardBackgroundColor="@color/purchase_card_background_tint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -97,6 +98,7 @@
                     android:text="@{purchase.comment}"
                     tools:text="брикет 18гр"
                     app:layout_constraintStart_toStartOf="@id/product"
+                    android:visibility="@{purchase.comment.length() > 0 ? View.VISIBLE : View.GONE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/date"/>
 
