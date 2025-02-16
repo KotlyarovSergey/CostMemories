@@ -63,21 +63,25 @@
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/filter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="8dp"
                 android:background="#E1E9E9"
-                android:drawableEnd="@drawable/baseline_auto_awesome_24"
+                android:drawableEnd="@drawable/filter_icon"
                 android:drawablePadding="16dp"
                 android:drawableTint="@color/black"
+                android:layout_marginBottom="8dp"
                 android:inputType="text"
                 android:paddingHorizontal="16dp"
+                android:text="@={viewModel.filterSequence}"
                 android:paddingVertical="16dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/white"
-                android:onTextChanged="@{(txt, st, bf, cnt) -> viewModel.onFilterTextChanged(txt)}"
+                android:onTextChanged="@{(txt, st, bf, cnt) -> viewModel.onFilterTextChanged()}"
                 android:textSize="18sp" />
+<!--                android:onTextChanged="@{(txt, st, bf, cnt) -> viewModel.onFilterTextChanged(txt)}"-->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler"

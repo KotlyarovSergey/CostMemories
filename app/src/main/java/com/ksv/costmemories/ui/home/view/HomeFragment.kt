@@ -1,6 +1,7 @@
 package com.ksv.costmemories.ui.home.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -33,7 +34,6 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //Log.d("ksvlog", "MainFragment createdView")
         _binding = FragmentHomeBinding.inflate(layoutInflater)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -54,7 +54,6 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.purchases.onEach { purchasesList ->
-//            Log.d("ksvlog", purchasesList.toString())
             adapter.submitList(purchasesList)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 

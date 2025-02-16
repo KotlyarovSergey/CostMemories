@@ -96,6 +96,7 @@
                     android:layout_marginTop="4dp"
                     android:textSize="14sp"
                     android:text="@{purchase.comment}"
+                    android:maxLines="2"
                     tools:text="брикет 18гр"
                     app:layout_constraintStart_toStartOf="@id/product"
                     android:visibility="@{purchase.comment.length() > 0 ? View.VISIBLE : View.GONE}"
