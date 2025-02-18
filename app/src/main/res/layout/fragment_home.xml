@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="#DFF4F4"
                     android:backgroundTintMode="src_over"
-                    android:drawableStart="@drawable/filter_icon"
+                    android:drawableStart="@drawable/icon_filter"
                     android:drawablePadding="16dp"
                     android:drawableTint="@color/black"
                     android:inputType="text"
