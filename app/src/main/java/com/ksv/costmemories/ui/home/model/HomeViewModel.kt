@@ -32,7 +32,10 @@ class HomeViewModel(
     val state = _state.asStateFlow()
 
     var filterSequence: String = ""
-
+        set(value) {
+            field = value.trim()
+            filterPurchases()
+        }
 
     fun onItemClick(id: Long) {
         _state.value = HomeState.EditPurchase(id)
@@ -52,12 +55,14 @@ class HomeViewModel(
 
 //    fun onFilterTextChanged(ch: CharSequence) {
     fun onFilterTextChanged() {
+//        Log.d("ksvlog", "onFilterChanged $filterSequence")
+//        filterSequence = ch.toString()
         _purchases.value = filter(_purchasesDB.value)
         _state.value = if (_purchases.value.isEmpty()) HomeState.Empty else HomeState.Normal
     }
 
     private fun filter(purchases: List<PurchaseTuple>): List<PurchaseTuple> {
-        //Log.d("ksvlog", "filter:\n\tpurchases: $purchases\n\tfilter: $filterSequence")
+//        Log.d("ksvlog", "filter:\n\tpurchases: $purchases\n\tfilter: $filterSequence")
         val filtered = purchases
             .filter {
                 it.title.contains(filterSequence, true) ||
@@ -65,6 +70,19 @@ class HomeViewModel(
             }
 
         return filtered
+    }
+
+    private fun filterPurchases(){
+        _purchases.value = _purchasesDB.value.filter {
+            it.title.contains(filterSequence, true) ||
+            it.product.contains(filterSequence, true)
+        }
+        _state.value = if (_purchases.value.isEmpty()) HomeState.Empty else HomeState.Normal
+    }
+
+    private fun filterPurchasesAdvance(){
+        val words = filterSequence.split(" ")
+        
     }
 
 }

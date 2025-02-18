@@ -4,104 +4,108 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="purchase"
             type="com.ksv.costmemories.entity.PurchaseTuple" />
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
     </data>
 
     <FrameLayout
         android:id="@+id/root_view"
-        android:padding="2dp"
-        android:layout_margin="2dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginVertical="1dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card"
-            app:cardCornerRadius="8dp"
-            app:cardBackgroundColor="@color/purchase_card_background_tint"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/purchase_card_background_tint"
+            app:cardCornerRadius="16dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_marginBottom="8dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
 
                 <TextView
                     android:id="@+id/cost"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:text="@{@string/cost_pattern(purchase.cost)}"
-                    tools:text="540р"
                     android:layout_margin="8dp"
+                    android:text="@{@string/cost_pattern(purchase.cost)}"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    tools:text="540р" />
 
                 <TextView
                     android:id="@+id/product"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{purchase.product}"
-                    tools:text="Сыр"
-                    android:layout_marginTop="4dp"
                     android:layout_marginStart="8dp"
-                    android:textSize="18sp"
+                    android:layout_marginTop="4dp"
+                    android:text="@{purchase.product}"
+                    android:textSize="21sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Сыр" />
 
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
                     android:layout_marginStart="6dp"
                     android:text="@{purchase.title}"
-                    tools:text="Российский"
+                    android:textSize="21sp"
+                    app:layout_constraintBottom_toBottomOf="@id/product"
+                    app:layout_constraintEnd_toStartOf="@id/cost"
                     app:layout_constraintStart_toEndOf="@id/product"
                     app:layout_constraintTop_toTopOf="@id/product"
-                    app:layout_constraintBottom_toBottomOf="@id/product"
-                    app:layout_constraintEnd_toStartOf="@id/cost"/>
+                    tools:text="Российский" />
 
                 <TextView
                     android:id="@+id/date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:textSize="14sp"
                     android:text="@{purchase.date}"
-                    tools:text="10.02.25"
+                    android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="@id/product"
-                    app:layout_constraintTop_toBottomOf="@id/product"/>
+                    app:layout_constraintTop_toBottomOf="@id/product"
+                    tools:text="10.02.25" />
 
                 <TextView
                     android:id="@+id/shop"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
                     android:layout_marginStart="6dp"
                     android:text="@{purchase.shop}"
-                    tools:text="Магнит"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@id/date"
+                    app:layout_constraintEnd_toStartOf="@id/cost"
                     app:layout_constraintStart_toEndOf="@id/date"
                     app:layout_constraintTop_toTopOf="@id/date"
-                    app:layout_constraintBottom_toBottomOf="@id/date"
-                    app:layout_constraintEnd_toStartOf="@id/cost"/>
+                    tools:text="Магнит" />
 
                 <TextView
                     android:id="@+id/comment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:textSize="14sp"
-                    android:text="@{purchase.comment}"
+                    android:layout_marginEnd="32dp"
+                    android:ellipsize="end"
                     android:maxLines="2"
-                    tools:text="брикет 18гр"
-                    app:layout_constraintStart_toStartOf="@id/product"
+                    android:text="@{purchase.comment}"
+                    android:textSize="14sp"
                     android:visibility="@{purchase.comment.length() > 0 ? View.VISIBLE : View.GONE}"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/date"/>
+                    app:layout_constraintStart_toStartOf="@id/product"
+                    app:layout_constraintTop_toBottomOf="@id/date"
+                    tools:text="брикет 18гр" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
