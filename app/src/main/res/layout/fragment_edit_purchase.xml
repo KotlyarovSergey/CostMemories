@@ -152,6 +152,17 @@
                 android:textAllCaps="true"
                 android:textSize="22sp" />
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:onClick="@{() -> viewModel.onDeleteClick()}"
+                android:paddingVertical="8dp"
+                android:text="@string/purchase_edit_delete"
+                android:textAllCaps="true"
+                android:backgroundTint="#811A1A"
+                android:textSize="22sp" />
+
         </LinearLayout>
     </ScrollView>
 </layout>

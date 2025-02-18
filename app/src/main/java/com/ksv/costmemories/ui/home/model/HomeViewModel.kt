@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.stateIn
 class HomeViewModel(
     purchasesDao: PurchasesDao
 ) : ViewModel() {
-    private val _purchasesDB = purchasesDao.getAllFlow()
+    private val _purchasesDB = purchasesDao.getAllAsTupleFlow()
         .onEach {
             _purchases.value = filter(it)
             _state.value = if (_purchases.value.isEmpty()) HomeState.Empty else HomeState.Normal
@@ -62,11 +62,11 @@ class HomeViewModel(
     }
 
     private fun filter(purchases: List<PurchaseTuple>): List<PurchaseTuple> {
-//        Log.d("ksvlog", "filter:\n\tpurchases: $purchases\n\tfilter: $filterSequence")
+        //Log.d("ksvlog", "HomeViewModel.filter:\n\tpurchases: $purchases\n\tfilter: $filterSequence")
         val filtered = purchases
             .filter {
                 it.title.contains(filterSequence, true) ||
-                        it.product.contains(filterSequence, true)
+                it.product.contains(filterSequence, true)
             }
 
         return filtered

@@ -1,11 +1,13 @@
 package com.ksv.costmemories.ui.edit_purchase.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -50,7 +52,8 @@ class EditPurchaseFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         fillAutoCompleteData()
 
-        viewModel.purchase.onEach { purchase->
+        viewModel.purchaseTuple.onEach { purchase->
+            //Log.d("ksvlog", "purchase: $purchase")
             binding.date.setText(purchase.date)
             binding.product.setText(purchase.product)
             binding.title.setText(purchase.title)
@@ -70,6 +73,9 @@ class EditPurchaseFragment : Fragment() {
                     findNavController().navigate(R.id.action_editPurchaseFragment_to_homeFragment)
                     viewModel.onHomeNavigate()
                 }
+                EditState.Delete -> {
+                    openDeleteConfirmDialog()
+                }
                 else -> {}
             }
         }.launchIn(viewLifecycleOwner.lifecycleScope)
@@ -87,7 +93,7 @@ class EditPurchaseFragment : Fragment() {
             )
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
-        viewModel.titiles.onEach { titles ->
+        viewModel.titles.onEach { titles ->
             val titlesToList = titles.map { it.title }
             binding.title.setAdapter(
                 ArrayAdapter(
@@ -123,5 +129,19 @@ class EditPurchaseFragment : Fragment() {
         }
 
         datePicker.show(childFragmentManager, datePicker::class.java.name)
+    }
+
+    private fun openDeleteConfirmDialog(){
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.dialog_purchase_delete_title)
+            .setMessage(R.string.dialog_purchase_delete_message)
+            .setPositiveButton(R.string.dialog_yes){ _, _ ->
+                viewModel.onDeleteConfirm()
+            }
+            .setNegativeButton(R.string.dialog_no) {_, _ -> }
+            .setOnDismissListener {
+                viewModel.onDeleteConfirmDialogDismiss()
+            }
+            .show()
     }
 }

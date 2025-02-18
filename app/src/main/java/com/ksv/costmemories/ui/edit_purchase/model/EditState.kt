@@ -5,4 +5,5 @@ sealed class EditState {
     class Error(val msg: String): EditState()
     data object Finish: EditState()
     data object SetDate: EditState()
+    data object Delete: EditState()
 }

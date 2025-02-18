@@ -4,7 +4,6 @@ package com.ksv.costmemories.data
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.ksv.costmemories.entity.Group
@@ -46,8 +45,9 @@ interface PurchasesDao {
             "FROM purchases " +
             "INNER JOIN product_groups ON purchases.product_id = product_groups.id " +
             "INNER JOIN product_titles ON purchases.title_id = product_titles.id " +
-            "INNER JOIN shops ON purchases.shop_id = shops.id")
-    fun getAllFlow(): Flow<List<PurchaseTuple>>
+            "INNER JOIN shops ON purchases.shop_id = shops.id "+
+            "ORDER by purchases.id DESC")
+    fun getAllAsTupleFlow(): Flow<List<PurchaseTuple>>
 
 
     @Query("SELECT " +
@@ -64,7 +64,10 @@ interface PurchasesDao {
             "INNER JOIN product_titles ON purchases.title_id = product_titles.id " +
             "INNER JOIN shops ON purchases.shop_id = shops.id " +
             "WHERE purchases.id=:id")
-    suspend fun getPurchase(id: Long): PurchaseTuple
+    suspend fun getPurchaseTuple(id: Long): PurchaseTuple
+
+    @Query("SELECT * FROM purchases WHERE purchases.id=:id")
+    suspend fun getPurchase(id: Long): Purchase
 
     @Query("SELECT purchases.id, date, cost, comment, product_groups.group_name AS product, " +
             "product_titles.title AS title, shops.shop_name AS shop_name, comment " +

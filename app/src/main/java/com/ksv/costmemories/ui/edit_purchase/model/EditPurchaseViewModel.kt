@@ -20,7 +20,7 @@ class EditPurchaseViewModel(
     private val purchasesDao: PurchasesDao,
     purchaseId: Long
 ): ViewModel() {
-    val purchase = purchasesDao.purchaseOnId(purchaseId)
+    val purchaseTuple = purchasesDao.purchaseOnId(purchaseId)
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
@@ -39,7 +39,7 @@ class EditPurchaseViewModel(
             started = SharingStarted.Eagerly,
             initialValue = emptyList()
         )
-    val titiles = purchasesDao.getAllTitles()
+    val titles = purchasesDao.getAllTitles()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
@@ -67,13 +67,33 @@ class EditPurchaseViewModel(
         }
     }
 
+    fun onDeleteClick(){
+        // ask to Delete
+        _state.value = EditState.Delete
+        //onDeleteConfirm()
+    }
+
+    fun onDeleteConfirm(){
+        CoroutineScope(Dispatchers.Default).launch {
+        //viewModelScope.launch {
+            val purchase = purchasesDao.getPurchase(purchaseTuple.value.id)
+            purchasesDao.delete(purchase)
+        }
+        _state.value = EditState.Finish
+    }
+
     fun onHomeNavigate(){
+        _state.value = EditState.Normal
+    }
+
+    fun onDeleteConfirmDialogDismiss(){
         _state.value = EditState.Normal
     }
 
     fun onDateDialogOpen(){
         _state.value = EditState.Normal
     }
+
 
 
     private fun hasNoErrors(): Boolean{
@@ -97,7 +117,7 @@ class EditPurchaseViewModel(
     private fun updatePurchaseOnDB(){
 //      viewModelScope.launch {
         CoroutineScope(Dispatchers.Default).launch {
-            val id = purchase.value.id
+            val id = purchaseTuple.value.id
             val shopId = getShopId()
             val titleId = getTitleId()
             val productId = getProductId()
@@ -128,7 +148,7 @@ class EditPurchaseViewModel(
 
     private suspend fun getTitleId():Long{
         val titleTrim = title.trim()
-        val correlateTitle = titiles.value.find { it.title == titleTrim }
+        val correlateTitle = titles.value.find { it.title == titleTrim }
         return correlateTitle?.id ?: purchasesDao.insertTitle(Product(title = titleTrim))
     }
 }

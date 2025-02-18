@@ -21,6 +21,7 @@
 
     <string name="edit_purchase_caption">Редактировать</string>
     <string name="purchase_edit_save">Сохранить</string>
+    <string name="purchase_edit_delete">Удалить</string>
 
 
     <string name="add_purchase_success">Покупка добавлена</string>
@@ -28,4 +29,10 @@
     <string name="button_add_caption">добавить</string>
     <string name="menu_home_select_all_title">select all</string>
     <string name="menu_home_delete_title">delete</string>
+
+    <string name="dialog_yes">Да</string>
+    <string name="dialog_no">Нет</string>
+    <string name="dialog_purchase_delete_title">Внимание!</string>
+    <string name="dialog_purchase_delete_message">Хотите удалить покупку?</string>
+
 </resources>
