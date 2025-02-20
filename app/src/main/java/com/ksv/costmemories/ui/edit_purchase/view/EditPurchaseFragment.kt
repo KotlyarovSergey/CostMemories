@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -52,15 +53,17 @@ class EditPurchaseFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         fillAutoCompleteData()
 
-        viewModel.purchaseTuple.onEach { purchase->
+        viewModel.purchaseTuple.onEach { purchase ->
             //Log.d("ksvlog", "purchase: $purchase")
-            binding.date.setText(purchase.date)
-            binding.product.setText(purchase.product)
-            binding.title.setText(purchase.title)
-            binding.shop.setText(purchase.shop)
-            val cost = if(purchase.cost == 0) "" else purchase.cost.toString()
-            binding.cost.setText(cost)
-            binding.comment.setText(purchase.comment)
+            purchase?.let {
+                binding.date.setText(purchase.date)
+                binding.product.setText(purchase.product)
+                binding.title.setText(purchase.title)
+                binding.shop.setText(purchase.shop)
+                val cost = if(purchase.cost == 0) "" else purchase.cost.toString()
+                binding.cost.setText(cost)
+                binding.comment.setText(purchase.comment)
+            }
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.state.onEach { state->
@@ -75,6 +78,10 @@ class EditPurchaseFragment : Fragment() {
                 }
                 EditState.Delete -> {
                     openDeleteConfirmDialog()
+                }
+                is EditState.Error -> {
+                    Toast.makeText(requireContext(), state.msg, Toast.LENGTH_SHORT).show()
+                    viewModel.onErrorMsgShow()
                 }
                 else -> {}
             }

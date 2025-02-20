@@ -76,7 +76,7 @@ interface PurchasesDao {
             "INNER JOIN product_titles ON purchases.title_id = product_titles.id " +
             "INNER JOIN shops ON purchases.shop_id = shops.id " +
             "WHERE purchases.id=:id")
-    fun purchaseOnId(id: Long): Flow<PurchaseTuple>
+    fun purchaseOnId(id: Long): Flow<PurchaseTuple?>
 
 
     @Insert

@@ -24,7 +24,8 @@ class EditPurchaseViewModel(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
-            initialValue = PurchaseTuple.EMPTY
+            initialValue = null
+//            initialValue = PurchaseTuple.EMPTY
         )
 
     val shops = purchasesDao.getAllShops()
@@ -62,10 +63,15 @@ class EditPurchaseViewModel(
 
     fun onSaveClick(){
         if(hasNoErrors()){
-            updatePurchaseOnDB()
+            if(purchaseTuple.value == null)
+                addPurchaseToDB()
+            else
+                updatePurchaseOnDB()
             _state.value = EditState.Finish
         }
     }
+
+
 
     fun onDeleteClick(){
         // ask to Delete
@@ -74,15 +80,21 @@ class EditPurchaseViewModel(
     }
 
     fun onDeleteConfirm(){
-        CoroutineScope(Dispatchers.Default).launch {
-        //viewModelScope.launch {
-            val purchase = purchasesDao.getPurchase(purchaseTuple.value.id)
-            purchasesDao.delete(purchase)
+        purchaseTuple.value?.let {
+            CoroutineScope(Dispatchers.Default).launch {
+            //viewModelScope.launch {
+                val purchase = purchasesDao.getPurchase(purchaseTuple.value!!.id)
+                purchasesDao.delete(purchase)
+            }
         }
         _state.value = EditState.Finish
     }
 
     fun onHomeNavigate(){
+        _state.value = EditState.Normal
+    }
+
+    fun onErrorMsgShow(){
         _state.value = EditState.Normal
     }
 
@@ -97,7 +109,10 @@ class EditPurchaseViewModel(
 
 
     private fun hasNoErrors(): Boolean{
-        return if(product.isBlank()){
+        return if(date.isBlank()){
+            _state.value = EditState.Error("Выберите дату покупки")
+            false
+        } else if(product.isBlank()){
             _state.value = EditState.Error("Укажите продукт")
             false
         } else if (title.isBlank()){
@@ -116,13 +131,33 @@ class EditPurchaseViewModel(
 
     private fun updatePurchaseOnDB(){
 //      viewModelScope.launch {
+        purchaseTuple.value?.let {
+            CoroutineScope(Dispatchers.Default).launch {
+                val id = purchaseTuple.value!!.id
+                val shopId = getShopId()
+                val titleId = getTitleId()
+                val productId = getProductId()
+                val purchase = Purchase(
+                    id = id,
+                    date = date,
+                    productId = productId,
+                    shopId = shopId,
+                    titleId = titleId,
+                    comment = comment,
+                    cost = cost.toInt(),
+                )
+                purchasesDao.update(purchase)
+            }
+        }
+    }
+
+    private fun addPurchaseToDB(){
+//      viewModelScope.launch {
         CoroutineScope(Dispatchers.Default).launch {
-            val id = purchaseTuple.value.id
             val shopId = getShopId()
             val titleId = getTitleId()
             val productId = getProductId()
             val purchase = Purchase(
-                id = id,
                 date = date,
                 productId = productId,
                 shopId = shopId,
@@ -130,7 +165,7 @@ class EditPurchaseViewModel(
                 comment = comment,
                 cost = cost.toInt(),
             )
-            purchasesDao.update(purchase)
+            purchasesDao.insert(purchase)
         }
     }
 
