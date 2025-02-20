@@ -20,11 +20,11 @@ object FillDb {
             Shop(shop_name = "Ермолино")
         )
 
-        val shopsDao = Dependencies.getShopsDao()
-        shops.forEach {
-            shopsDao.insert(it)
-        }
+//        val shopsDao = Dependencies.getShopsDao()
+//        shops.forEach { shopsDao.insert(it) }
 
+        val purchasesDao = Dependencies.getPurchasesDao()
+        shops.forEach { purchasesDao.insertShop(it) }
     }
 
     private suspend fun fillProducts() {
@@ -52,8 +52,11 @@ object FillDb {
             Product(title = "Шампиньоны сырые"),
             Product(title = "Ассорти")
         )
-        val titleDao = Dependencies.getTitlesDao()
-        titles.forEach { titleDao.inset(it) }
+//        val titleDao = Dependencies.getTitlesDao()
+//        titles.forEach { titleDao.inset(it) }
+
+        val purchasesDao = Dependencies.getPurchasesDao()
+        titles.forEach { purchasesDao.insertTitle(it) }
     }
 
     private suspend fun fillGroups() {
@@ -65,7 +68,10 @@ object FillDb {
             Group(group = "Рыба"),
             Group(group = "Грибы")
         )
-        val productsDao = Dependencies.getProductsDao()
-        products.forEach { productsDao.insert(it) }
+//        val productsDao = Dependencies.getProductsDao()
+//        products.forEach { productsDao.insert(it) }
+
+        val purchasesDao = Dependencies.getPurchasesDao()
+        products.forEach { purchasesDao.insertProduct(it) }
     }
 }

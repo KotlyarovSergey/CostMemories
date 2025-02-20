@@ -16,8 +16,8 @@ object Dependencies {
             .build()
     }
 
-    fun getShopsDao() = appDatabase.getShopsDao()
-    fun getTitlesDao() = appDatabase.getTitlesDao()
-    fun getProductsDao() = appDatabase.getProductsDao()
+//    fun getShopsDao() = appDatabase.getShopsDao()
+//    fun getTitlesDao() = appDatabase.getTitlesDao()
+//    fun getProductsDao() = appDatabase.getProductsDao()
     fun getPurchasesDao() = appDatabase.getPurchasesDao()
 }
