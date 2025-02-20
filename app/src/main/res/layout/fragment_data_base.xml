@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.database.view.DataBaseFragment">
 
@@ -7,17 +8,72 @@
 
     </data>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/data_base_background"
+        android:orientation="vertical"
+        android:padding="8dp">
 
-        <TextView
+        <androidx.cardview.widget.CardView
+            style="@style/Widget.Material3.CardView.Elevated"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:layout_gravity="center"
-            android:text="@string/hello_blank_fragment"
-            android:textSize="64sp" />
+            app:cardBackgroundColor="#1565C0"
+            app:cardCornerRadius="16dp">
 
-    </FrameLayout>
+            <RadioGroup
+                android:id="@+id/radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/radio_products"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Продукты"
+                    android:theme="@style/Theme.CostMemories.ForRadio" />
+
+                <RadioButton
+                    android:id="@+id/radio_titles"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Названия"
+                    android:theme="@style/Theme.CostMemories.ForRadio" />
+
+                <RadioButton
+                    android:id="@+id/radio_shops"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Магазины"
+                    android:theme="@style/Theme.CostMemories.ForRadio" />
+
+            </RadioGroup>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            style="@style/Widget.Material3.CardView.Elevated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#1565C0"
+            app:cardCornerRadius="16dp">
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
 </layout>

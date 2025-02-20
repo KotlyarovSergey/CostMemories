@@ -8,4 +8,9 @@
     <style name="Theme.CostMemories" parent="Base.Theme.CostMemories">
         <item name="colorPrimary">@color/primary</item>
     </style>
+    <style name="Theme.CostMemories.ForRadio" parent="Base.Theme.CostMemories">
+        <item name="colorPrimary">@color/onSurfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/onSurfaceVariant</item>
+    </style>
+
 </resources>
