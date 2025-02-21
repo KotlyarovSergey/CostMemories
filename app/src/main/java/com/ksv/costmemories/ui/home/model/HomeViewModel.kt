@@ -63,6 +63,7 @@ class HomeViewModel(
 
     private fun filter(purchases: List<PurchaseTuple>): List<PurchaseTuple> {
         //Log.d("ksvlog", "HomeViewModel.filter:\n\tpurchases: $purchases\n\tfilter: $filterSequence")
+        try {
         val filtered = purchases
             .filter {
                 it.title.contains(filterSequence, true) ||
@@ -70,6 +71,10 @@ class HomeViewModel(
             }
 
         return filtered
+        } catch (exception: Exception){
+            Log.d("ksvlog", "!!! Exception on HomeViewModel.filter:\n\tpurchases: $purchases\n\tfilter: $filterSequence")
+            return purchases
+        }
     }
 
     private fun filterPurchases(){

@@ -15,22 +15,24 @@ import com.ksv.costmemories.databinding.FragmentDataBaseBinding
 import com.ksv.costmemories.ui.database.entity.DbItemType
 import com.ksv.costmemories.ui.database.model.DataBaseViewModel
 import com.ksv.costmemories.ui.database.model.DataBaseViewModelAdapter
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class DataBaseFragment : Fragment() {
     private var _binding: FragmentDataBaseBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: DataBaseViewModel by viewModels{
+    private val viewModel: DataBaseViewModel by viewModels {
         DataBaseViewModelAdapter(
             Dependencies.getPurchasesDao()
         )
     }
 
     private val adapter = DataBadeItemsAdapter(
-        onApplyClick = {id, text -> onApplyClick(id, text)},
-        onDeleteClick = {id -> onDeleteClick(id)}
+        onApplyClick = { id, text -> onApplyClick(id, text) },
+        onDeleteClick = { id -> onDeleteClick(id) }
     )
 
     override fun onCreateView(
@@ -51,30 +53,45 @@ class DataBaseFragment : Fragment() {
         binding.recycler.adapter = adapter
 
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
-            when(checkedId){
-                R.id.radio_shops -> { viewModel.onCheckedChange(DbItemType.SHOP) }
-                R.id.radio_products -> { viewModel.onCheckedChange(DbItemType.PRODUCT) }
-                R.id.radio_titles -> { viewModel.onCheckedChange(DbItemType.TITLE) }
-                else -> {throw IllegalArgumentException("Unknown radio button Id")}
+            when (checkedId) {
+                R.id.radio_shops -> {
+                    viewModel.onCheckedChange(DbItemType.SHOP)
+                }
+
+                R.id.radio_products -> {
+                    viewModel.onCheckedChange(DbItemType.PRODUCT)
+                }
+
+                R.id.radio_titles -> {
+                    viewModel.onCheckedChange(DbItemType.TITLE)
+                }
+
+                else -> {
+                    throw IllegalArgumentException("Unknown radio button Id")
+                }
             }
         }
 
-//        viewModel.items.onEach { items ->
-//            adapter.submitList(items)
-//        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            delay(200)
+            when (viewModel.checkedRadio) {
+                DbItemType.PRODUCT -> binding.radioProducts.isChecked = true
+                DbItemType.TITLE -> binding.radioTitles.isChecked = true
+                DbItemType.SHOP -> binding.radioShops.isChecked = true
+            }
+        }
 
-        viewModel.titles.onEach { items ->
-            //Log.d("ksvlog", "DataBaseFragment: items: $items")
+        viewModel.items.onEach { items ->
             adapter.submitList(items)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
     }
 
-    private fun onApplyClick(id: Long, text: String){
+    private fun onApplyClick(id: Long, text: String) {
         Toast.makeText(requireContext(), "apply on id: $id", Toast.LENGTH_SHORT).show()
     }
 
-    private fun onDeleteClick(id: Long){
+    private fun onDeleteClick(id: Long) {
         Toast.makeText(requireContext(), "delete on id: $id", Toast.LENGTH_SHORT).show()
     }
 }
