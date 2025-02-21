@@ -9,8 +9,8 @@
         <item name="colorPrimary">@color/primary</item>
     </style>
     <style name="Theme.CostMemories.ForRadio" parent="Base.Theme.CostMemories">
-        <item name="colorPrimary">@color/onSurfaceVariant</item>
-        <item name="colorOnSurfaceVariant">@color/onSurfaceVariant</item>
+        <item name="colorPrimary">@color/on_data_base_card_background</item>
+        <item name="colorOnSurfaceVariant">@color/on_data_base_card_background</item>
     </style>
 
 </resources>

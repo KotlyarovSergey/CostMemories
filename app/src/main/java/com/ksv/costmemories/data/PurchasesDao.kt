@@ -89,21 +89,21 @@ interface PurchasesDao {
     suspend fun delete(purchase: Purchase)
 
     //          SHOPS
-    @Query("SELECT * FROM shops")
+    @Query("SELECT * FROM shops ORDER by shop_name")
     fun getAllShops(): Flow<List<Shop>>
 
     @Insert
     suspend fun insertShop(shop: Shop): Long
 
     //          TITLES
-    @Query("SELECT * FROM product_titles")
+    @Query("SELECT * FROM product_titles ORDER by title")
     fun getAllTitles(): Flow<List<Product>>
 
     @Insert
     suspend fun insertTitle(product: Product): Long
 
     //          PRODUCTS
-    @Query("SELECT * FROM product_groups")
+    @Query("SELECT * FROM product_groups ORDER by group_name")
     fun getAllProducts(): Flow<List<Group>>
 
     @Insert

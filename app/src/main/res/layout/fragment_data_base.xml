@@ -19,7 +19,7 @@
             style="@style/Widget.Material3.CardView.Elevated"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="#1565C0"
+            app:cardBackgroundColor="@color/data_base_card_background"
             app:cardCornerRadius="16dp">
 
             <RadioGroup
@@ -60,9 +60,11 @@
         <androidx.cardview.widget.CardView
             style="@style/Widget.Material3.CardView.Elevated"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:cardBackgroundColor="#1565C0"
+            android:layout_height="0dp"
+            android:layout_weight="1.0"
+            android:layout_marginTop="8dp"
+            android:paddingVertical="8dp"
+            app:cardBackgroundColor="@color/data_base_card_background"
             app:cardCornerRadius="16dp">
 
 
@@ -70,7 +72,7 @@
                 android:id="@+id/recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_marginTop="16dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 

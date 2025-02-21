@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="RadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
-        <item name="android:textSize">24sp</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/on_data_base_card_background</item>
         <item name="android:paddingHorizontal">8dp</item>
-
     </style>
 </resources>

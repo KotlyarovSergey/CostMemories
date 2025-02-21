@@ -10,4 +10,8 @@
     <color name="purchase_card_background_tint">#C6F4FA</color>
     <color name="home_background">#183850</color>
     <color name="data_base_background">#0F2B4B</color>
+    <color name="data_base_card_background">#143F6D</color>
+    <color name="on_data_base_card_background">#CBDEF2</color>
+
+
 </resources>

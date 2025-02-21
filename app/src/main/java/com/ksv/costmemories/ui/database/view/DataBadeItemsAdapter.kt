@@ -1,5 +1,6 @@
 package com.ksv.costmemories.ui.database.view
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,14 +19,15 @@ class DataBadeItemsAdapter(
     class DBItemViewHolder(val binding: DbItemViewBinding): ViewHolder(binding.root){
         fun bind(item: DbItem, onApplyClick: (Long, String) -> Unit, onDeleteClick: (Long) -> Unit){
             binding.itemEdit.setText(item.text)
-            binding.itemEdit.doOnTextChanged { text, _, _, _ ->
-                val newText = text.toString().trim()
-                binding.apply.visibility =
-                    if (item.text.compareTo(newText, true) == 0)
-                        View.INVISIBLE
-                    else
-                        View.VISIBLE
-            }
+//            binding.itemEdit.doOnTextChanged { text, _, _, _ ->
+//                val newText = text.toString().trim()
+//                Log.d("ksvlog", "old: ${item.text}, new: $newText")
+//                binding.apply.visibility =
+//                    if (item.text.compareTo(newText, true) == 0)
+//                        View.INVISIBLE
+//                    else
+//                        View.VISIBLE
+//            }
             val counterTxt = "[${item.counter}]"
             binding.counter.text = counterTxt
             binding.delete.setOnClickListener { onApplyClick(item.id, binding.itemEdit.text.toString().trim()) }
