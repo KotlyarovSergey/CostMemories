@@ -24,7 +24,7 @@ object FillDb {
 //        shops.forEach { shopsDao.insert(it) }
 
         val purchasesDao = Dependencies.getPurchasesDao()
-        shops.forEach { purchasesDao.insertShop(it) }
+        shops.forEach { purchasesDao.shopInsert(it) }
     }
 
     private suspend fun fillProducts() {
@@ -56,7 +56,7 @@ object FillDb {
 //        titles.forEach { titleDao.inset(it) }
 
         val purchasesDao = Dependencies.getPurchasesDao()
-        titles.forEach { purchasesDao.insertTitle(it) }
+        titles.forEach { purchasesDao.titleInsert(it) }
     }
 
     private suspend fun fillGroups() {
@@ -72,6 +72,6 @@ object FillDb {
 //        products.forEach { productsDao.insert(it) }
 
         val purchasesDao = Dependencies.getPurchasesDao()
-        products.forEach { purchasesDao.insertProduct(it) }
+        products.forEach { purchasesDao.productInsert(it) }
     }
 }

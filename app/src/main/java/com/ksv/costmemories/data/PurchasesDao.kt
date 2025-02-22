@@ -80,13 +80,13 @@ interface PurchasesDao {
     fun purchaseOnId(id: Long): Flow<PurchaseTuple?>
 
     @Insert
-    suspend fun insert(purchase: Purchase)
+    suspend fun purchaseInsert(purchase: Purchase)
 
     @Update
-    suspend fun update(purchase: Purchase)
+    suspend fun purchaseUpdate(purchase: Purchase)
 
     @Delete
-    suspend fun delete(purchase: Purchase)
+    suspend fun purchaseDelete(purchase: Purchase)
 
 
 
@@ -102,7 +102,13 @@ interface PurchasesDao {
     fun shopsCounter(): Flow<List<EntityCounter>>
 
     @Insert
-    suspend fun insertShop(shop: Shop): Long
+    suspend fun shopInsert(shop: Shop): Long
+
+    @Delete
+    suspend fun shopDelete(shop: Shop)
+
+    @Update
+    suspend fun shopUpdate(shop: Shop)
 
 
 
@@ -118,14 +124,17 @@ interface PurchasesDao {
     fun titlesCounter(): Flow<List<EntityCounter>>
 
     @Insert
-    suspend fun insertTitle(product: Product): Long
+    suspend fun titleInsert(product: Product): Long
 
-//    SELECT product_groups.id as goup_id, group_name, COUNT(purchases.id)
-//    FROM product_groups
-//    LEFT JOIN purchases
-//    ON product_groups.id=purchases.product_id
-//    GROUP BY product_groups.id
-//    ORDER BY group_name;
+    @Update
+    suspend fun titleUpdate(product: Product)
+
+    @Query("DELETE FROM product_titles WHERE id=:id")
+    suspend fun titleDeleteId(id: Long)
+
+
+
+
 
     //          PRODUCTS
     @Query("SELECT * FROM product_groups ORDER by group_name")
@@ -139,5 +148,13 @@ interface PurchasesDao {
     fun productsCounter(): Flow<List<EntityCounter>>
 
     @Insert
-    suspend fun insertProduct(group: Group): Long
+    suspend fun productInsert(group: Group): Long
+
+    @Update
+    suspend fun productUpdate(group: Group)
+
+    @Delete
+    suspend fun productDelete(group: Group)
+
+
 }

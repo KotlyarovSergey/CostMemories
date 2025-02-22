@@ -104,26 +104,26 @@ class AddPurchaseViewModel(
                 comment = comment,
                 cost = cost.toInt(),
             )
-            purchasesDao.insert(purchase)
+            purchasesDao.purchaseInsert(purchase)
         }
     }
 
     private suspend fun getShopId():Long{
         val shopTrim = shop.trim()
         val correlateShop = shops.value.find { it.shop_name == shopTrim }
-        return correlateShop?.id ?: purchasesDao.insertShop(Shop(shop_name = shopTrim))
+        return correlateShop?.id ?: purchasesDao.shopInsert(Shop(shop_name = shopTrim))
     }
 
     private suspend fun getProductId():Long{
         val productTrim = product.trim()
         val correlateProduct = products.value.find { it.group == productTrim }
-        return correlateProduct?.id ?: purchasesDao.insertProduct(Group(group = productTrim))
+        return correlateProduct?.id ?: purchasesDao.productInsert(Group(group = productTrim))
     }
 
     private suspend fun getTitleId():Long{
         val titleTrim = title.trim()
         val correlateTitle = titles.value.find { it.title == titleTrim }
-        return correlateTitle?.id ?: purchasesDao.insertTitle(Product(title = titleTrim))
+        return correlateTitle?.id ?: purchasesDao.titleInsert(Product(title = titleTrim))
     }
 
     private fun getToday(): String {

@@ -13,25 +13,25 @@ import com.ksv.costmemories.ui.database.entity.DbItem
 
 class DataBadeItemsAdapter(
     private val onApplyClick: (Long, String) -> Unit,
-    private val onDeleteClick: (Long) -> Unit
+    private val onDeleteClick: (Long) -> Unit,
+    private val onItemApplyClick: (DbItem, String) -> Unit,
+    private val onItemDeleteClick: (DbItem) -> Unit
 ): ListAdapter<DbItem, DataBadeItemsAdapter.DBItemViewHolder>(DbItemDiffUtilCallback()) {
 
     class DBItemViewHolder(val binding: DbItemViewBinding): ViewHolder(binding.root){
-        fun bind(item: DbItem, onApplyClick: (Long, String) -> Unit, onDeleteClick: (Long) -> Unit){
+        fun bind(item: DbItem,
+                 onApplyClick: (Long, String) -> Unit,
+                 onDeleteClick: (Long) -> Unit,
+                onItemApplyClick: (DbItem, String) -> Unit,
+                onItemDeleteClick: (DbItem) -> Unit)
+        {
             binding.itemEdit.setText(item.text)
-//            binding.itemEdit.doOnTextChanged { text, _, _, _ ->
-//                val newText = text.toString().trim()
-//                Log.d("ksvlog", "old: ${item.text}, new: $newText")
-//                binding.apply.visibility =
-//                    if (item.text.compareTo(newText, true) == 0)
-//                        View.INVISIBLE
-//                    else
-//                        View.VISIBLE
-//            }
             val counterTxt = "[${item.counter}]"
             binding.counter.text = counterTxt
-            binding.delete.setOnClickListener { onApplyClick(item.id, binding.itemEdit.text.toString().trim()) }
-            binding.apply.setOnClickListener { onDeleteClick(item.id) }
+//            binding.delete.setOnClickListener { onApplyClick(item.id, binding.itemEdit.text.toString().trim()) }
+//            binding.apply.setOnClickListener { onDeleteClick(item.id) }
+            binding.delete.setOnClickListener { onItemDeleteClick(item) }
+            binding.apply.setOnClickListener { onItemApplyClick(item, binding.itemEdit.text.toString().trim()) }
         }
     }
 
@@ -54,6 +54,6 @@ class DataBadeItemsAdapter(
     }
 
     override fun onBindViewHolder(holder: DBItemViewHolder, position: Int) {
-        holder.bind(currentList[position], onApplyClick, onDeleteClick)
+        holder.bind(currentList[position], onApplyClick, onDeleteClick, onItemApplyClick, onItemDeleteClick)
     }
 }

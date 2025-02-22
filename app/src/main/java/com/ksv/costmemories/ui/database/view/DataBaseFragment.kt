@@ -1,5 +1,7 @@
 package com.ksv.costmemories.ui.database.view
 
+import android.app.AlertDialog
+import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,9 +14,11 @@ import androidx.lifecycle.lifecycleScope
 import com.ksv.costmemories.Dependencies
 import com.ksv.costmemories.R
 import com.ksv.costmemories.databinding.FragmentDataBaseBinding
+import com.ksv.costmemories.ui.database.entity.DbItem
 import com.ksv.costmemories.ui.database.entity.DbItemType
 import com.ksv.costmemories.ui.database.model.DataBaseViewModel
 import com.ksv.costmemories.ui.database.model.DataBaseViewModelAdapter
+import com.ksv.costmemories.ui.database.model.DbFragmentState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -26,13 +30,16 @@ class DataBaseFragment : Fragment() {
 
     private val viewModel: DataBaseViewModel by viewModels {
         DataBaseViewModelAdapter(
+            requireActivity().application,
             Dependencies.getPurchasesDao()
         )
     }
 
     private val adapter = DataBadeItemsAdapter(
-        onApplyClick = { id, text -> onApplyClick(id, text) },
-        onDeleteClick = { id -> onDeleteClick(id) }
+        onApplyClick = { id, text ->  },
+        onDeleteClick = { id ->  },
+        onItemApplyClick = { item, text -> onItemApplyClick(item, text) },
+        onItemDeleteClick = { item -> onItemDeleteClick(item)}
     )
 
     override fun onCreateView(
@@ -85,6 +92,29 @@ class DataBaseFragment : Fragment() {
             adapter.submitList(items)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
+//        viewModel.itms.onEach { items ->
+//            adapter.submitList(items)
+//        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+        viewModel.state.onEach { state ->
+            when(state){
+                is DbFragmentState.ConfirmRequest -> showDeleteRequest(state.id, state.request)
+                DbFragmentState.Normal -> { }
+            }
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+    }
+
+    private fun showDeleteRequest(id: Long, msg: String){
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.dialog_db_item_delete_title)
+            .setMessage(msg)
+            .setPositiveButton(R.string.dialog_yes){ _,_ -> viewModel.onItemDeleteConfirm(id)}
+            .setNegativeButton(R.string.dialog_no){_,_ -> }
+            //.setOnDismissListener { viewModel.onConfirmDialogShow() }
+            .show()
+
+        viewModel.onConfirmDialogShow()
     }
 
     private fun onApplyClick(id: Long, text: String) {
@@ -93,5 +123,14 @@ class DataBaseFragment : Fragment() {
 
     private fun onDeleteClick(id: Long) {
         Toast.makeText(requireContext(), "delete on id: $id", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun onItemApplyClick(item: DbItem, text: String) {
+        Toast.makeText(requireContext(), "apply on id: ${item.text}", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun onItemDeleteClick(item: DbItem) {
+        //Toast.makeText(requireContext(), "delete on id: ${item.text}", Toast.LENGTH_SHORT).show()
+        viewModel.onItemDeleteClick(item)
     }
 }
