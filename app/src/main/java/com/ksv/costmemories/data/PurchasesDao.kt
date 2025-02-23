@@ -90,7 +90,8 @@ interface PurchasesDao {
 
 
 
-    //          SHOPS
+    //                  SHOPS
+
     @Query("SELECT * FROM shops ORDER by shop_name")
     fun getAllShops(): Flow<List<Shop>>
 
@@ -100,6 +101,9 @@ interface PurchasesDao {
             "GROUP BY shops.id " +
             "ORDER BY shop_name")
     fun shopsCounter(): Flow<List<EntityCounter>>
+
+    @Query ("SELECT * FROM shops WHERE id=:id")
+    suspend fun getShopOnId(id: Long): Shop?
 
     @Insert
     suspend fun shopInsert(shop: Shop): Long
@@ -113,7 +117,9 @@ interface PurchasesDao {
     @Query("DELETE FROM shops WHERE id=:id")
     suspend fun shopDeleteId(id: Long)
 
-    //          TITLES
+
+
+    //                  TITLES
     @Query("SELECT * FROM product_titles ORDER by title")
     fun getAllTitles(): Flow<List<Product>>
 
@@ -123,6 +129,9 @@ interface PurchasesDao {
             "GROUP BY product_titles.id " +
             "ORDER BY title")
     fun titlesCounter(): Flow<List<EntityCounter>>
+
+    @Query ("SELECT * FROM product_titles WHERE id=:id")
+    suspend fun getTitleOnId(id: Long): Product?
 
     @Insert
     suspend fun titleInsert(product: Product): Long
@@ -147,6 +156,9 @@ interface PurchasesDao {
             "GROUP BY product_groups.id " +
             "ORDER BY group_name")
     fun productsCounter(): Flow<List<EntityCounter>>
+
+    @Query ("SELECT * FROM product_groups WHERE id=:id")
+    suspend fun getProductOnId(id: Long): Group?
 
     @Insert
     suspend fun productInsert(group: Group): Long

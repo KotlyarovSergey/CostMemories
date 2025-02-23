@@ -122,7 +122,8 @@ class DataBaseFragment : Fragment() {
     }
 
     private fun onItemApplyClick(item: DbItem, text: String) {
-        Toast.makeText(requireContext(), "apply on id: ${item.text}", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(requireContext(), "apply on id: ${item.text}, ${item.type}", Toast.LENGTH_SHORT).show()
+        viewModel.onItemApplyClick(item, text)
     }
 
     private fun onItemDeleteClick(item: DbItem) {

@@ -1,11 +1,13 @@
 package com.ksv.costmemories.ui.database.model
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.ksv.costmemories.R
 import com.ksv.costmemories.data.PurchasesDao
 import com.ksv.costmemories.entity.EntityCounter
+import com.ksv.costmemories.entity.Product
 import com.ksv.costmemories.ui.database.entity.DbItem
 import com.ksv.costmemories.ui.database.entity.DbItemType
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,13 +30,13 @@ class DataBaseViewModel(
     private val shops = purchasesDao.shopsCounter()
         .onEach {
             if(_checkedRadio == DbItemType.SHOP){
-                _items.value = productsCounterToDbItems(it)
+                _items.value = shopsCounterToDbItems(it)
             }
         }
     private val products = purchasesDao.productsCounter()
         .onEach {
             if(_checkedRadio == DbItemType.PRODUCT){
-                _items.value = shopsCounterToDbItems(it)
+                _items.value = productsCounterToDbItems(it)
             }
         }
 
@@ -68,11 +70,20 @@ class DataBaseViewModel(
         _checkedRadio = itemType
     }
 
+    fun onItemApplyClick(item: DbItem, text: String){
+        // проверить на совпадение
+            // переспросить
+
+        // обновиттть данные в бд
+        updateItemOnDB(item, text)
+    }
+
     fun onItemDeleteClick(item: DbItem){
-        val msg = if(item.counter > 0)
-            application.getString(R.string.dialog_item_delete_message, item.text, item.counter)
-        else
-            application.getString(R.string.dialog_empty_item_delete_message, item.text)
+        val msg =
+            if(item.counter > 0)
+                application.getString(R.string.dialog_item_delete_message, item.text, item.counter)
+            else
+                application.getString(R.string.dialog_empty_item_delete_message, item.text)
 
         _state.value = DbFragmentState.ConfirmRequest(item.id, msg)
     }
@@ -83,6 +94,49 @@ class DataBaseViewModel(
 
     fun onConfirmDialogShow(){
         _state.value = DbFragmentState.Normal
+    }
+
+
+
+
+    private fun updateItemOnDB(item: DbItem, text: String){
+        when(item.type){
+            DbItemType.PRODUCT -> updateProduct(item.id, text)
+            DbItemType.TITLE -> updateTitle(item.id, text)
+            DbItemType.SHOP -> updateShop(item.id, text)
+        }
+    }
+
+
+    private fun updateTitle(id: Long, text: String){
+        viewModelScope.launch {
+            val ondTitle = purchasesDao.getTitleOnId(id)
+            ondTitle?.let {
+                val newTitle = ondTitle.copy(title = text)
+                purchasesDao.titleUpdate(newTitle)
+            }
+        }
+    }
+
+    private fun updateShop(id: Long, text: String){
+        viewModelScope.launch {
+            val oldShop = purchasesDao.getShopOnId(id)
+            Log.d("ksvlog", "oldShop: $oldShop")
+            oldShop?.let {
+                val newShop = oldShop.copy(shop_name = text)
+                purchasesDao.shopUpdate(newShop)
+            }
+        }
+    }
+
+    private fun updateProduct(id: Long, text: String){
+        viewModelScope.launch {
+            val ondProduct = purchasesDao.getProductOnId(id)
+            ondProduct?.let{
+                val newProduct = ondProduct.copy(group = text)
+                purchasesDao.productUpdate(newProduct)
+            }
+        }
     }
 
 
