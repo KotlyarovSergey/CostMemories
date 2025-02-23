@@ -12,26 +12,22 @@ import com.ksv.costmemories.databinding.DbItemViewBinding
 import com.ksv.costmemories.ui.database.entity.DbItem
 
 class DataBadeItemsAdapter(
-    private val onApplyClick: (Long, String) -> Unit,
-    private val onDeleteClick: (Long) -> Unit,
     private val onItemApplyClick: (DbItem, String) -> Unit,
     private val onItemDeleteClick: (DbItem) -> Unit
 ): ListAdapter<DbItem, DataBadeItemsAdapter.DBItemViewHolder>(DbItemDiffUtilCallback()) {
 
     class DBItemViewHolder(val binding: DbItemViewBinding): ViewHolder(binding.root){
         fun bind(item: DbItem,
-                 onApplyClick: (Long, String) -> Unit,
-                 onDeleteClick: (Long) -> Unit,
                 onItemApplyClick: (DbItem, String) -> Unit,
                 onItemDeleteClick: (DbItem) -> Unit)
         {
             binding.itemEdit.setText(item.text)
             val counterTxt = "[${item.counter}]"
             binding.counter.text = counterTxt
-//            binding.delete.setOnClickListener { onApplyClick(item.id, binding.itemEdit.text.toString().trim()) }
-//            binding.apply.setOnClickListener { onDeleteClick(item.id) }
             binding.delete.setOnClickListener { onItemDeleteClick(item) }
-            binding.apply.setOnClickListener { onItemApplyClick(item, binding.itemEdit.text.toString().trim()) }
+            binding.apply.setOnClickListener {
+                //binding.itemEdit.clearFocus()
+                onItemApplyClick(item, binding.itemEdit.text.toString().trim()) }
         }
     }
 
@@ -54,6 +50,6 @@ class DataBadeItemsAdapter(
     }
 
     override fun onBindViewHolder(holder: DBItemViewHolder, position: Int) {
-        holder.bind(currentList[position], onApplyClick, onDeleteClick, onItemApplyClick, onItemDeleteClick)
+        holder.bind(currentList[position], onItemApplyClick, onItemDeleteClick)
     }
 }

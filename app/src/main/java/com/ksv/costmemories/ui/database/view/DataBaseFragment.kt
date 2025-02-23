@@ -1,11 +1,14 @@
 package com.ksv.costmemories.ui.database.view
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
+import android.os.IBinder
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -34,8 +37,6 @@ class DataBaseFragment : Fragment() {
     }
 
     private val adapter = DataBadeItemsAdapter(
-        onApplyClick = { id, text ->  },
-        onDeleteClick = { id ->  },
         onItemApplyClick = { item, text -> onItemApplyClick(item, text) },
         onItemDeleteClick = { item -> onItemDeleteClick(item)}
     )
@@ -56,6 +57,8 @@ class DataBaseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recycler.adapter = adapter
+
+        binding.root.setOnClickListener { clearFocusHideKeyboard() }
 
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
@@ -87,6 +90,7 @@ class DataBaseFragment : Fragment() {
         }
 
         viewModel.items.onEach { items ->
+            //binding.root.clearFocus()
             adapter.submitList(items)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -95,9 +99,15 @@ class DataBaseFragment : Fragment() {
                 DbFragmentState.Normal -> { }
                 is DbFragmentState.DeleteConfirmRequest -> showDeleteRequest(state.id, state.request)
                 is DbFragmentState.ReplaceConfirmRequest -> showMergeRequest(state.item, state.text, state.msg)
+                is DbFragmentState.ShowSuccessMessage -> showSuccessMessage(state.msg)
             }
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
+    }
+
+    private fun showSuccessMessage(msg: String){
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+        viewModel.onConfirmDialogShow()
     }
 
     private fun showDeleteRequest(id: Long, msg: String){
@@ -124,21 +134,19 @@ class DataBaseFragment : Fragment() {
         viewModel.onConfirmDialogShow()
     }
 
-    private fun onApplyClick(id: Long, text: String) {
-        Toast.makeText(requireContext(), "apply on id: $id", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun onDeleteClick(id: Long) {
-        Toast.makeText(requireContext(), "delete on id: $id", Toast.LENGTH_SHORT).show()
-    }
-
     private fun onItemApplyClick(item: DbItem, text: String) {
-//        Toast.makeText(requireContext(), "apply on id: ${item.text}, ${item.type}", Toast.LENGTH_SHORT).show()
+        clearFocusHideKeyboard()
         viewModel.onItemApplyClick(item, text)
     }
 
     private fun onItemDeleteClick(item: DbItem) {
-        //Toast.makeText(requireContext(), "delete on id: ${item.text}", Toast.LENGTH_SHORT).show()
+        clearFocusHideKeyboard()
         viewModel.onItemDeleteClick(item)
+    }
+
+    private fun clearFocusHideKeyboard(){
+        binding.root.clearFocus()
+        val inputManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 }

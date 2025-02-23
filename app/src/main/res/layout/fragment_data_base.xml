@@ -34,7 +34,7 @@
                     style="@style/RadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Продукты"
+                    android:text="@string/db_frag_product_caption"
                     android:theme="@style/Theme.CostMemories.ForRadio" />
 
                 <RadioButton
@@ -42,7 +42,7 @@
                     style="@style/RadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Названия"
+                    android:text="@string/db_frag_title_caption"
                     android:theme="@style/Theme.CostMemories.ForRadio" />
 
                 <RadioButton
@@ -50,7 +50,7 @@
                     style="@style/RadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Магазины"
+                    android:text="@string/db_frag_shop_caption"
                     android:theme="@style/Theme.CostMemories.ForRadio" />
 
             </RadioGroup>

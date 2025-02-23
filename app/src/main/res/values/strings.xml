@@ -37,9 +37,12 @@
     <string name="dialog_db_item_delete_title">Внимание!</string>
     <string name="dialog_empty_item_delete_message">Удалить &#171;%s&#187;?</string>
     <string name="dialog_item_delete_message">&#171;%s&#187; упоминается в %d покупках. Все они будут удалены. Удаляем?</string>
+    <string name="dialog_replace_confirm_message">%s &#171;%s&#187; уже есть. Объединить покупки?</string>
+    <string name="dialog_replace_success_message">&#171;%s&#187; обновлён</string>
 
-    <string name="hello_blank_fragment">DataBase fragment</string>
-
+    <string name="db_frag_title_caption">Название</string>
+    <string name="db_frag_shop_caption">Магазин</string>
+    <string name="db_frag_product_caption">Продукт</string>
     <string name="db_item_icon_delete_description">Удалить</string>
     <string name="db_item_icon_apply_description">Применить</string>
     <string name="db_item_hint">элемент</string>

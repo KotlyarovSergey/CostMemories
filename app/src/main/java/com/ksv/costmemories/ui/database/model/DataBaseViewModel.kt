@@ -72,10 +72,16 @@ class DataBaseViewModel(
     }
 
     fun onItemApplyClick(item: DbItem, text: String) {
-        if (itWillBeDuplicate(text)) {
-            _state.value = DbFragmentState.ReplaceConfirmRequest(item, text, "Объединяем")
-        } else
-            updateItemOnDB(item, text)
+        if(item.text.compareTo(text) != 0) {
+            if (itWillBeDuplicate(text)) {
+                val msg = getReplaceConfirmMessage(item, text)
+                _state.value = DbFragmentState.ReplaceConfirmRequest(item, text, msg)
+            } else {
+                updateItemOnDB(item, text)
+                val msg = application.getString(R.string.dialog_replace_success_message, text)
+                _state.value = DbFragmentState.ShowSuccessMessage(msg)
+            }
+        }
     }
 
     fun onItemDeleteClick(item: DbItem) {
@@ -94,7 +100,7 @@ class DataBaseViewModel(
 
     fun onItemReplaceConfirm(item: DbItem, text: String) {
         val oldId = item.id
-        val basedItem = items.value.firstOrNull() { it.text.compareTo(text, true) == 0 }
+        val basedItem = items.value.firstOrNull { it.text.compareTo(text) == 0 }
         basedItem?.let {
             val newId = basedItem.id
             viewModelScope.launch {
@@ -125,9 +131,19 @@ class DataBaseViewModel(
     }
 
 
+
+    private fun getReplaceConfirmMessage(item: DbItem, text: String): String{
+        val type = when(item.type){
+            DbItemType.PRODUCT -> application.getString(R.string.db_frag_product_caption)
+            DbItemType.TITLE -> application.getString(R.string.db_frag_title_caption)
+            DbItemType.SHOP -> application.getString(R.string.db_frag_shop_caption)
+        }
+        return application.getString(R.string.dialog_replace_confirm_message, type, text)
+    }
+
     private fun itWillBeDuplicate(text: String): Boolean {
         items.value.forEach {
-            if (it.text.compareTo(text, true) == 0) return true
+            if (it.text.compareTo(text) == 0) return true
         }
         return false
     }
@@ -169,7 +185,6 @@ class DataBaseViewModel(
             }
         }
     }
-
 
     private fun deleteItemFromDB(id: Long) {
         viewModelScope.launch {

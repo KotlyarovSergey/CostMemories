@@ -115,7 +115,7 @@ interface PurchasesDao {
             "FROM shops " +
             "LEFT JOIN purchases ON shops.id=purchases.shop_id " +
             "GROUP BY shops.id " +
-            "ORDER BY shop_name")
+            "ORDER BY UPPER(shop_name)")
     fun shopsCounter(): Flow<List<EntityCounter>>
 
     @Query ("SELECT * FROM shops WHERE id=:id")
@@ -145,7 +145,7 @@ interface PurchasesDao {
             "FROM product_titles " +
             "LEFT JOIN purchases ON product_titles.id=purchases.title_id " +
             "GROUP BY product_titles.id " +
-            "ORDER BY title")
+            "ORDER BY UPPER(title)")
     fun titlesCounter(): Flow<List<EntityCounter>>
 
     @Query ("SELECT * FROM product_titles WHERE id=:id")
@@ -172,7 +172,7 @@ interface PurchasesDao {
             "FROM product_groups " +
             "LEFT JOIN purchases ON product_groups.id=purchases.product_id " +
             "GROUP BY product_groups.id " +
-            "ORDER BY group_name")
+            "ORDER BY UPPER(group_name)")
     fun productsCounter(): Flow<List<EntityCounter>>
 
     @Query ("SELECT * FROM product_groups WHERE id=:id")
