@@ -13,17 +13,20 @@ import androidx.room.PrimaryKey
         ForeignKey(
             entity = Shop::class,
             parentColumns = ["id"],
-            childColumns = ["shop_id"]
+            childColumns = ["shop_id"],
+            onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = Group::class,
             parentColumns = ["id"],
-            childColumns = ["product_id"]
+            childColumns = ["product_id"],
+            onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = Product::class,
             parentColumns = ["id"],
-            childColumns = ["title_id"]
+            childColumns = ["title_id"],
+            onDelete = ForeignKey.CASCADE
         )
     ]
 
