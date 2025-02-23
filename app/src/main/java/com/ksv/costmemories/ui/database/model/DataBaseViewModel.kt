@@ -2,21 +2,16 @@ package com.ksv.costmemories.ui.database.model
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ksv.costmemories.R
 import com.ksv.costmemories.data.PurchasesDao
 import com.ksv.costmemories.entity.EntityCounter
 import com.ksv.costmemories.ui.database.entity.DbItem
 import com.ksv.costmemories.ui.database.entity.DbItemType
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class DataBaseViewModel(
@@ -25,53 +20,26 @@ class DataBaseViewModel(
 ): AndroidViewModel(application) {
 
     private val titles = purchasesDao.titlesCounter()
-        //.map { titlesCounterToDbItems(it) }
-//        .stateIn(
-//            viewModelScope,
-//            SharingStarted.Eagerly,
-//            emptyList()
-//        )
         .onEach {
             if(_checkedRadio == DbItemType.TITLE){
                 _items.value = titlesCounterToDbItems(it)
             }
         }
-
     private val shops = purchasesDao.shopsCounter()
-        //.map { shopsCounterToDbItems(it) }
-//        .stateIn(
-//            viewModelScope,
-//            SharingStarted.Eagerly,
-//            emptyList()
-//        )
         .onEach {
             if(_checkedRadio == DbItemType.SHOP){
-                _items.value = titlesCounterToDbItems(it)
+                _items.value = productsCounterToDbItems(it)
             }
         }
-
     private val products = purchasesDao.productsCounter()
-        //.map { productsCounterToDbItems(it) }
-//        .stateIn(
-//            viewModelScope,
-//            SharingStarted.Eagerly,
-//            emptyList()
-//        )
         .onEach {
             if(_checkedRadio == DbItemType.PRODUCT){
-                _items.value = titlesCounterToDbItems(it)
+                _items.value = shopsCounterToDbItems(it)
             }
         }
-
 
     private val _items = MutableStateFlow<List<DbItem>>(emptyList())
     val items = _items.asStateFlow()
-
-    var itms = products.stateIn(
-        viewModelScope,
-        SharingStarted.Eagerly,
-        emptyList()
-    )
 
     private var _checkedRadio = DbItemType.PRODUCT
     val checkedRadio get() = _checkedRadio
@@ -82,30 +50,19 @@ class DataBaseViewModel(
     fun onCheckedChange(itemType: DbItemType){
         when(itemType){
             DbItemType.PRODUCT -> {
-                //_items.value = products.value
-                itms = products.stateIn(
-                    viewModelScope,
-                    SharingStarted.Eagerly,
-                    emptyList()
-                )
-
-
+                viewModelScope.launch {
+                    products.collect()
+                }
             }
             DbItemType.TITLE -> {
-                //_items.value = titles.value
-                itms = titles.stateIn(
-                    viewModelScope,
-                    SharingStarted.Eagerly,
-                    emptyList()
-                )
+                viewModelScope.launch {
+                    titles.collect()
+                }
             }
             DbItemType.SHOP -> {
-                //_items.value = shops.value
-                itms = shops.stateIn(
-                    viewModelScope,
-                    SharingStarted.Eagerly,
-                    emptyList()
-                )
+                viewModelScope.launch {
+                    shops.collect()
+                }
             }
         }
         _checkedRadio = itemType
@@ -121,11 +78,7 @@ class DataBaseViewModel(
     }
 
     fun onItemDeleteConfirm(id: Long){
-        when(_checkedRadio){
-            DbItemType.PRODUCT -> { }
-            DbItemType.TITLE -> deleteTitle(id)
-            DbItemType.SHOP -> { }
-        }
+        deleteItemFromDB(id)
     }
 
     fun onConfirmDialogShow(){
@@ -133,18 +86,15 @@ class DataBaseViewModel(
     }
 
 
-    private fun deleteTitle(id: Long){
+    private fun deleteItemFromDB(id: Long){
         viewModelScope.launch {
-            purchasesDao.titleDeleteId(id)
+            when(_checkedRadio){
+                DbItemType.PRODUCT -> purchasesDao.productDeleteId(id)
+                DbItemType.TITLE -> purchasesDao.titleDeleteId(id)
+                DbItemType.SHOP -> purchasesDao.shopDeleteId(id)
+            }
         }
     }
-
-    private fun deleteItemSuspend(deleteFunction: (Long) -> Unit, id: Long){
-        viewModelScope.launch {
-            deleteFunction(id)
-        }
-    }
-
 
     private fun titlesCounterToDbItems(titles: List<EntityCounter>): List<DbItem>{
         return titles.map { title -> DbItem(title.id, title.title, title.count, DbItemType.TITLE) }

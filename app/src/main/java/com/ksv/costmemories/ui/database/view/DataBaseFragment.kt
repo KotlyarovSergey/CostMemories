@@ -92,10 +92,6 @@ class DataBaseFragment : Fragment() {
             adapter.submitList(items)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
-//        viewModel.itms.onEach { items ->
-//            adapter.submitList(items)
-//        }.launchIn(viewLifecycleOwner.lifecycleScope)
-
         viewModel.state.onEach { state ->
             when(state){
                 is DbFragmentState.ConfirmRequest -> showDeleteRequest(state.id, state.request)

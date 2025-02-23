@@ -110,7 +110,8 @@ interface PurchasesDao {
     @Update
     suspend fun shopUpdate(shop: Shop)
 
-
+    @Query("DELETE FROM shops WHERE id=:id")
+    suspend fun shopDeleteId(id: Long)
 
     //          TITLES
     @Query("SELECT * FROM product_titles ORDER by title")
@@ -156,5 +157,7 @@ interface PurchasesDao {
     @Delete
     suspend fun productDelete(group: Group)
 
+    @Query("DELETE FROM product_groups WHERE id=:id")
+    suspend fun productDeleteId(id: Long)
 
 }
