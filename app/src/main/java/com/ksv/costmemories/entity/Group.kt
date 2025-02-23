@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "product_groups",
-    indices = [Index(value = ["group_name"],
-        unique = true)])
+    indices = [Index("group_name")]
+)
 data class Group(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo(name = "group_name") val group: String

@@ -1,9 +1,7 @@
 package com.ksv.costmemories.ui.database.view
 
 import android.app.AlertDialog
-import android.app.Application
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -94,8 +92,9 @@ class DataBaseFragment : Fragment() {
 
         viewModel.state.onEach { state ->
             when(state){
-                is DbFragmentState.ConfirmRequest -> showDeleteRequest(state.id, state.request)
                 DbFragmentState.Normal -> { }
+                is DbFragmentState.DeleteConfirmRequest -> showDeleteRequest(state.id, state.request)
+                is DbFragmentState.ReplaceConfirmRequest -> showMergeRequest(state.item, state.text, state.msg)
             }
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -107,6 +106,18 @@ class DataBaseFragment : Fragment() {
             .setMessage(msg)
             .setPositiveButton(R.string.dialog_yes){ _,_ -> viewModel.onItemDeleteConfirm(id)}
             .setNegativeButton(R.string.dialog_no){_,_ -> }
+            //.setOnDismissListener { viewModel.onConfirmDialogShow() }
+            .show()
+
+        viewModel.onConfirmDialogShow()
+    }
+
+    private fun showMergeRequest(item: DbItem, text: String, msg: String){
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.dialog_db_item_delete_title)
+            .setMessage(msg)
+            .setPositiveButton(R.string.dialog_yes){ _,_ -> viewModel.onItemReplaceConfirm(item, text)}
+            .setNegativeButton(R.string.dialog_no){_,_ -> viewModel.onItemMergeDeny(item, text)}
             //.setOnDismissListener { viewModel.onConfirmDialogShow() }
             .show()
 

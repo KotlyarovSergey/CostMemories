@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.ksv.costmemories.R
 import com.ksv.costmemories.data.PurchasesDao
 import com.ksv.costmemories.entity.EntityCounter
-import com.ksv.costmemories.entity.Product
 import com.ksv.costmemories.ui.database.entity.DbItem
 import com.ksv.costmemories.ui.database.entity.DbItemType
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,23 +18,23 @@ import kotlinx.coroutines.launch
 class DataBaseViewModel(
     private val application: Application,
     private val purchasesDao: PurchasesDao
-): AndroidViewModel(application) {
+) : AndroidViewModel(application) {
 
     private val titles = purchasesDao.titlesCounter()
         .onEach {
-            if(_checkedRadio == DbItemType.TITLE){
+            if (_checkedRadio == DbItemType.TITLE) {
                 _items.value = titlesCounterToDbItems(it)
             }
         }
     private val shops = purchasesDao.shopsCounter()
         .onEach {
-            if(_checkedRadio == DbItemType.SHOP){
+            if (_checkedRadio == DbItemType.SHOP) {
                 _items.value = shopsCounterToDbItems(it)
             }
         }
     private val products = purchasesDao.productsCounter()
         .onEach {
-            if(_checkedRadio == DbItemType.PRODUCT){
+            if (_checkedRadio == DbItemType.PRODUCT) {
                 _items.value = productsCounterToDbItems(it)
             }
         }
@@ -49,18 +48,20 @@ class DataBaseViewModel(
     private val _state = MutableStateFlow<DbFragmentState>(DbFragmentState.Normal)
     val state = _state.asStateFlow()
 
-    fun onCheckedChange(itemType: DbItemType){
-        when(itemType){
+    fun onCheckedChange(itemType: DbItemType) {
+        when (itemType) {
             DbItemType.PRODUCT -> {
                 viewModelScope.launch {
                     products.collect()
                 }
             }
+
             DbItemType.TITLE -> {
                 viewModelScope.launch {
                     titles.collect()
                 }
             }
+
             DbItemType.SHOP -> {
                 viewModelScope.launch {
                     shops.collect()
@@ -70,45 +71,76 @@ class DataBaseViewModel(
         _checkedRadio = itemType
     }
 
-    fun onItemApplyClick(item: DbItem, text: String){
-        // проверить на совпадение
-            // переспросить
-
-        // обновиттть данные в бд
-        updateItemOnDB(item, text)
+    fun onItemApplyClick(item: DbItem, text: String) {
+        if (itWillBeDuplicate(text)) {
+            _state.value = DbFragmentState.ReplaceConfirmRequest(item, text, "Объединяем")
+        } else
+            updateItemOnDB(item, text)
     }
 
-    fun onItemDeleteClick(item: DbItem){
+    fun onItemDeleteClick(item: DbItem) {
         val msg =
-            if(item.counter > 0)
+            if (item.counter > 0)
                 application.getString(R.string.dialog_item_delete_message, item.text, item.counter)
             else
                 application.getString(R.string.dialog_empty_item_delete_message, item.text)
 
-        _state.value = DbFragmentState.ConfirmRequest(item.id, msg)
+        _state.value = DbFragmentState.DeleteConfirmRequest(item.id, msg)
     }
 
-    fun onItemDeleteConfirm(id: Long){
+    fun onItemDeleteConfirm(id: Long) {
         deleteItemFromDB(id)
     }
 
-    fun onConfirmDialogShow(){
+    fun onItemReplaceConfirm(item: DbItem, text: String) {
+        val oldId = item.id
+        val basedItem = items.value.firstOrNull() { it.text.compareTo(text, true) == 0 }
+        basedItem?.let {
+            val newId = basedItem.id
+            viewModelScope.launch {
+                when(item.type){
+                    DbItemType.PRODUCT -> {
+                        purchasesDao.replaceProduct(oldId, newId)
+                        purchasesDao.productDeleteId(oldId)
+                    }
+                    DbItemType.TITLE -> {
+                        purchasesDao.replaceTitle(oldId, newId)
+                        purchasesDao.titleDeleteId(oldId)
+                    }
+                    DbItemType.SHOP -> {
+                        purchasesDao.replaceShop(oldId, newId)
+                        purchasesDao.shopDeleteId(oldId)
+                    }
+                }
+            }
+        }
+    }
+
+    fun onItemMergeDeny(item: DbItem, text: String) {
+        updateItemOnDB(item, text)
+    }
+
+    fun onConfirmDialogShow() {
         _state.value = DbFragmentState.Normal
     }
 
 
+    private fun itWillBeDuplicate(text: String): Boolean {
+        items.value.forEach {
+            if (it.text.compareTo(text, true) == 0) return true
+        }
+        return false
+    }
 
-
-    private fun updateItemOnDB(item: DbItem, text: String){
-        when(item.type){
+    private fun updateItemOnDB(item: DbItem, text: String) {
+        when (item.type) {
             DbItemType.PRODUCT -> updateProduct(item.id, text)
             DbItemType.TITLE -> updateTitle(item.id, text)
             DbItemType.SHOP -> updateShop(item.id, text)
         }
     }
 
-
-    private fun updateTitle(id: Long, text: String){
+    private fun updateTitle(id: Long, text: String) {
         viewModelScope.launch {
             val ondTitle = purchasesDao.getTitleOnId(id)
             ondTitle?.let {
@@ -118,10 +150,9 @@ class DataBaseViewModel(
         }
     }
 
-    private fun updateShop(id: Long, text: String){
+    private fun updateShop(id: Long, text: String) {
         viewModelScope.launch {
             val oldShop = purchasesDao.getShopOnId(id)
-            Log.d("ksvlog", "oldShop: $oldShop")
             oldShop?.let {
                 val newShop = oldShop.copy(shop_name = text)
                 purchasesDao.shopUpdate(newShop)
@@ -129,10 +160,10 @@ class DataBaseViewModel(
         }
     }
 
-    private fun updateProduct(id: Long, text: String){
+    private fun updateProduct(id: Long, text: String) {
         viewModelScope.launch {
             val ondProduct = purchasesDao.getProductOnId(id)
-            ondProduct?.let{
+            ondProduct?.let {
                 val newProduct = ondProduct.copy(group = text)
                 purchasesDao.productUpdate(newProduct)
             }
@@ -140,9 +171,9 @@ class DataBaseViewModel(
     }
 
 
-    private fun deleteItemFromDB(id: Long){
+    private fun deleteItemFromDB(id: Long) {
         viewModelScope.launch {
-            when(_checkedRadio){
+            when (_checkedRadio) {
                 DbItemType.PRODUCT -> purchasesDao.productDeleteId(id)
                 DbItemType.TITLE -> purchasesDao.titleDeleteId(id)
                 DbItemType.SHOP -> purchasesDao.shopDeleteId(id)
@@ -150,15 +181,22 @@ class DataBaseViewModel(
         }
     }
 
-    private fun titlesCounterToDbItems(titles: List<EntityCounter>): List<DbItem>{
+    private fun titlesCounterToDbItems(titles: List<EntityCounter>): List<DbItem> {
         return titles.map { title -> DbItem(title.id, title.title, title.count, DbItemType.TITLE) }
     }
 
-    private fun shopsCounterToDbItems(shops: List<EntityCounter>): List<DbItem>{
+    private fun shopsCounterToDbItems(shops: List<EntityCounter>): List<DbItem> {
         return shops.map { shop -> DbItem(shop.id, shop.title, shop.count, DbItemType.SHOP) }
     }
 
-    private fun productsCounterToDbItems(products: List<EntityCounter>): List<DbItem>{
-        return products.map { product -> DbItem(product.id, product.title, product.count, DbItemType.PRODUCT) }
+    private fun productsCounterToDbItems(products: List<EntityCounter>): List<DbItem> {
+        return products.map { product ->
+            DbItem(
+                product.id,
+                product.title,
+                product.count,
+                DbItemType.PRODUCT
+            )
+        }
     }
 }

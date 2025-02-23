@@ -85,6 +85,22 @@ interface PurchasesDao {
     @Update
     suspend fun purchaseUpdate(purchase: Purchase)
 
+    @Query("UPDATE purchases " +
+            "SET product_id=:newId " +
+            "WHERE product_id=:oldId")
+    suspend fun replaceProduct(oldId: Long, newId: Long)
+
+    @Query("UPDATE purchases " +
+            "SET title_id=:newId " +
+            "WHERE title_id=:oldId")
+    suspend fun replaceTitle(oldId: Long, newId: Long)
+
+    @Query("UPDATE purchases " +
+            "SET shop_id=:newId " +
+            "WHERE shop_id=:oldId")
+    suspend fun replaceShop(oldId: Long, newId: Long)
+
+
     @Delete
     suspend fun purchaseDelete(purchase: Purchase)
 
@@ -113,6 +129,8 @@ interface PurchasesDao {
 
     @Update
     suspend fun shopUpdate(shop: Shop)
+
+
 
     @Query("DELETE FROM shops WHERE id=:id")
     suspend fun shopDeleteId(id: Long)
