@@ -1,7 +1,6 @@
 package com.ksv.costmemories.ui.database.model
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.ksv.costmemories.R
@@ -170,7 +169,7 @@ class DataBaseViewModel(
         viewModelScope.launch {
             val oldShop = purchasesDao.getShopOnId(id)
             oldShop?.let {
-                val newShop = oldShop.copy(shop_name = text)
+                val newShop = oldShop.copy(shop = text)
                 purchasesDao.shopUpdate(newShop)
             }
         }
@@ -180,7 +179,7 @@ class DataBaseViewModel(
         viewModelScope.launch {
             val ondProduct = purchasesDao.getProductOnId(id)
             ondProduct?.let {
-                val newProduct = ondProduct.copy(group = text)
+                val newProduct = ondProduct.copy(product = text)
                 purchasesDao.productUpdate(newProduct)
             }
         }

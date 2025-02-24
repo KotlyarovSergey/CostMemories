@@ -1,7 +1,6 @@
 package com.ksv.costmemories.ui.edit_purchase.view
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -90,7 +89,7 @@ class EditPurchaseFragment : Fragment() {
 
     private fun fillAutoCompleteData() {
         viewModel.shops.onEach { shops ->
-            val shopsToList = shops.map { it.shop_name }
+            val shopsToList = shops.map { it.shop }
             binding.shop.setAdapter(
                 ArrayAdapter(
                     requireContext(),
@@ -112,7 +111,7 @@ class EditPurchaseFragment : Fragment() {
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.products.onEach { products ->
-            val productsToList = products.map { it.group }
+            val productsToList = products.map { it.product }
             binding.product.setAdapter(
                 ArrayAdapter(
                     requireContext(),

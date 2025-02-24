@@ -8,7 +8,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.ksv.costmemories.entity.EntityCounter
 import com.ksv.costmemories.entity.Group
-import com.ksv.costmemories.entity.Product
+import com.ksv.costmemories.entity.Title
 import com.ksv.costmemories.entity.Purchase
 import com.ksv.costmemories.entity.PurchaseTuple
 import com.ksv.costmemories.entity.Shop
@@ -24,28 +24,29 @@ interface PurchasesDao {
                 "date, " +
                 "cost, " +
                 "comment, " +
-                "product_groups.group_name AS product, " +
-                "product_titles.title AS title, " +
-                "shops.shop_name AS shop_name, " +
+                "products.product AS product, " +
+                "titles.title AS title, " +
+            "shops.shop AS shop, " +
                 "comment " +
             "FROM purchases " +
-            "INNER JOIN product_groups ON purchases.product_id = product_groups.id " +
-            "INNER JOIN product_titles ON purchases.title_id = product_titles.id " +
+            "INNER JOIN products ON purchases.product_id = products.id " +
+            "INNER JOIN titles ON purchases.title_id = titles.id " +
             "INNER JOIN shops ON purchases.shop_id = shops.id")
     suspend fun getAllAsTuple(): List<PurchaseTuple>
+
 
     @Query("SELECT " +
             "purchases.id, " +
             "date, " +
             "cost, " +
             "comment, " +
-            "product_groups.group_name AS product, " +
-            "product_titles.title AS title, " +
-            "shops.shop_name AS shop_name, " +
+            "products.product AS product, " +
+            "titles.title AS title, " +
+            "shops.shop AS shop, " +
             "comment " +
             "FROM purchases " +
-            "INNER JOIN product_groups ON purchases.product_id = product_groups.id " +
-            "INNER JOIN product_titles ON purchases.title_id = product_titles.id " +
+            "INNER JOIN products ON purchases.product_id = products.id " +
+            "INNER JOIN titles ON purchases.title_id = titles.id " +
             "INNER JOIN shops ON purchases.shop_id = shops.id "+
             "ORDER by purchases.id DESC")
     fun getAllAsTupleFlow(): Flow<List<PurchaseTuple>>
@@ -56,13 +57,13 @@ interface PurchasesDao {
             "date, " +
             "cost, " +
             "comment, " +
-            "product_groups.group_name AS product, " +
-            "product_titles.title AS title, " +
-            "shops.shop_name AS shop_name, " +
+            "products.product AS product, " +
+            "titles.title AS title, " +
+            "shops.shop AS shop, " +
             "comment " +
             "FROM purchases " +
-            "INNER JOIN product_groups ON purchases.product_id = product_groups.id " +
-            "INNER JOIN product_titles ON purchases.title_id = product_titles.id " +
+            "INNER JOIN products ON purchases.product_id = products.id " +
+            "INNER JOIN titles ON purchases.title_id = titles.id " +
             "INNER JOIN shops ON purchases.shop_id = shops.id " +
             "WHERE purchases.id=:id")
     suspend fun getPurchaseTuple(id: Long): PurchaseTuple
@@ -70,11 +71,13 @@ interface PurchasesDao {
     @Query("SELECT * FROM purchases WHERE purchases.id=:id")
     suspend fun getPurchase(id: Long): Purchase
 
-    @Query("SELECT purchases.id, date, cost, comment, product_groups.group_name AS product, " +
-            "product_titles.title AS title, shops.shop_name AS shop_name, comment " +
+    @Query("SELECT purchases.id, date, cost, comment, " +
+            "products.product AS product, " +
+            "titles.title AS title, " +
+            "shops.shop AS shop, comment " +
             "FROM purchases " +
-            "INNER JOIN product_groups ON purchases.product_id = product_groups.id " +
-            "INNER JOIN product_titles ON purchases.title_id = product_titles.id " +
+            "INNER JOIN products ON purchases.product_id = products.id " +
+            "INNER JOIN titles ON purchases.title_id = titles.id " +
             "INNER JOIN shops ON purchases.shop_id = shops.id " +
             "WHERE purchases.id=:id")
     fun purchaseOnId(id: Long): Flow<PurchaseTuple?>
@@ -108,14 +111,16 @@ interface PurchasesDao {
 
     //                  SHOPS
 
-    @Query("SELECT * FROM shops ORDER by shop_name")
+    @Query("SELECT * FROM shops ORDER by shop")
     fun getAllShops(): Flow<List<Shop>>
 
-    @Query("SELECT shops.id AS id, shop_name AS title, COUNT(purchases.id) AS count " +
+    @Query(
+        "SELECT shops.id AS id, shop AS title, COUNT(purchases.id) AS count " +
             "FROM shops " +
             "LEFT JOIN purchases ON shops.id=purchases.shop_id " +
             "GROUP BY shops.id " +
-            "ORDER BY UPPER(shop_name)")
+                "ORDER BY UPPER(shop)"
+    )
     fun shopsCounter(): Flow<List<EntityCounter>>
 
     @Query ("SELECT * FROM shops WHERE id=:id")
@@ -124,13 +129,11 @@ interface PurchasesDao {
     @Insert
     suspend fun shopInsert(shop: Shop): Long
 
-    @Delete
-    suspend fun shopDelete(shop: Shop)
-
     @Update
     suspend fun shopUpdate(shop: Shop)
 
-
+    @Delete
+    suspend fun shopDelete(shop: Shop)
 
     @Query("DELETE FROM shops WHERE id=:id")
     suspend fun shopDeleteId(id: Long)
@@ -138,26 +141,26 @@ interface PurchasesDao {
 
 
     //                  TITLES
-    @Query("SELECT * FROM product_titles ORDER by title")
-    fun getAllTitles(): Flow<List<Product>>
+    @Query("SELECT * FROM titles ORDER by title")
+    fun getAllTitles(): Flow<List<Title>>
 
-    @Query("SELECT product_titles.id AS id, title AS title, COUNT(purchases.id) AS count " +
-            "FROM product_titles " +
-            "LEFT JOIN purchases ON product_titles.id=purchases.title_id " +
-            "GROUP BY product_titles.id " +
+    @Query("SELECT titles.id AS id, title AS title, COUNT(purchases.id) AS count " +
+            "FROM titles " +
+            "LEFT JOIN purchases ON titles.id=purchases.title_id " +
+            "GROUP BY titles.id " +
             "ORDER BY UPPER(title)")
     fun titlesCounter(): Flow<List<EntityCounter>>
 
-    @Query ("SELECT * FROM product_titles WHERE id=:id")
-    suspend fun getTitleOnId(id: Long): Product?
+    @Query ("SELECT * FROM titles WHERE id=:id")
+    suspend fun getTitleOnId(id: Long): Title?
 
     @Insert
-    suspend fun titleInsert(product: Product): Long
+    suspend fun titleInsert(title: Title): Long
 
     @Update
-    suspend fun titleUpdate(product: Product)
+    suspend fun titleUpdate(title: Title)
 
-    @Query("DELETE FROM product_titles WHERE id=:id")
+    @Query("DELETE FROM titles WHERE id=:id")
     suspend fun titleDeleteId(id: Long)
 
 
@@ -165,17 +168,17 @@ interface PurchasesDao {
 
 
     //          PRODUCTS
-    @Query("SELECT * FROM product_groups ORDER by group_name")
+    @Query("SELECT * FROM products ORDER by product")
     fun getAllProducts(): Flow<List<Group>>
 
-    @Query("SELECT product_groups.id AS id, group_name AS title, COUNT(purchases.id) AS count " +
-            "FROM product_groups " +
-            "LEFT JOIN purchases ON product_groups.id=purchases.product_id " +
-            "GROUP BY product_groups.id " +
-            "ORDER BY UPPER(group_name)")
+    @Query("SELECT products.id AS id, product AS title, COUNT(purchases.id) AS count " +
+            "FROM products " +
+            "LEFT JOIN purchases ON products.id=purchases.product_id " +
+            "GROUP BY products.id " +
+            "ORDER BY UPPER(product)")
     fun productsCounter(): Flow<List<EntityCounter>>
 
-    @Query ("SELECT * FROM product_groups WHERE id=:id")
+    @Query ("SELECT * FROM products WHERE id=:id")
     suspend fun getProductOnId(id: Long): Group?
 
     @Insert
@@ -187,7 +190,7 @@ interface PurchasesDao {
     @Delete
     suspend fun productDelete(group: Group)
 
-    @Query("DELETE FROM product_groups WHERE id=:id")
+    @Query("DELETE FROM products WHERE id=:id")
     suspend fun productDeleteId(id: Long)
 
 }

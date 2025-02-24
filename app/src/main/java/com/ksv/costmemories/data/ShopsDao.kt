@@ -13,7 +13,7 @@ interface ShopsDao {
     @Query("SELECT * FROM shops")
     suspend fun getAllShops(): List<Shop>
 
-    @Query("SELECT id FROM shops WHERE shop_name=:shopName")
+    @Query("SELECT id FROM shops WHERE shop=:shopName")
     suspend fun getShopId(shopName: String): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

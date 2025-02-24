@@ -16,6 +16,7 @@ class HomeViewModel(
 ) : ViewModel() {
     private val _purchasesDB = purchasesDao.getAllAsTupleFlow()
         .onEach {
+            Log.d("ksvlog", "HomeViewModel._purchasesDB = $it")
             _purchases.value = filter(it)
             _state.value = if (_purchases.value.isEmpty()) HomeState.Empty else HomeState.Normal
         }
@@ -62,7 +63,7 @@ class HomeViewModel(
     }
 
     private fun filter(purchases: List<PurchaseTuple>): List<PurchaseTuple> {
-        //Log.d("ksvlog", "HomeViewModel.filter:\n\tpurchases: $purchases\n\tfilter: $filterSequence")
+        Log.d("ksvlog", "HomeViewModel.filter:\n\tpurchases: $purchases\n\tfilter: $filterSequence")
         try {
         val filtered = purchases
             .filter {

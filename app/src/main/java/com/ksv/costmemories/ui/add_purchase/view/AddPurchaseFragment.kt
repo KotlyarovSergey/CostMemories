@@ -71,7 +71,7 @@ class AddPurchaseFragment : Fragment() {
 
     private fun fillAutoCompleteData() {
         viewModel.shops.onEach { shops ->
-            val shopsToList = shops.map { it.shop_name }
+            val shopsToList = shops.map { it.shop }
             binding.shop.setAdapter(
                 ArrayAdapter(
                     requireContext(),
@@ -93,7 +93,7 @@ class AddPurchaseFragment : Fragment() {
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.products.onEach { products ->
-            val productsToList = products.map { it.group }
+            val productsToList = products.map { it.product }
             binding.product.setAdapter(
                 ArrayAdapter(
                     requireContext(),

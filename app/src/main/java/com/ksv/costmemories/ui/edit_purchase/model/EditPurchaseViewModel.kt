@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ksv.costmemories.data.PurchasesDao
 import com.ksv.costmemories.entity.Group
-import com.ksv.costmemories.entity.Product
+import com.ksv.costmemories.entity.Title
 import com.ksv.costmemories.entity.Purchase
 import com.ksv.costmemories.entity.Shop
 import kotlinx.coroutines.CoroutineScope
@@ -170,19 +170,19 @@ class EditPurchaseViewModel(
 
     private suspend fun getShopId():Long{
         val shopTrim = shop.trim()
-        val correlateShop = shops.value.find { it.shop_name == shopTrim }
-        return correlateShop?.id ?: purchasesDao.shopInsert(Shop(shop_name = shopTrim))
+        val correlateShop = shops.value.find { it.shop == shopTrim }
+        return correlateShop?.id ?: purchasesDao.shopInsert(Shop(shop = shopTrim))
     }
 
     private suspend fun getProductId():Long{
         val productTrim = product.trim()
-        val correlateProduct = products.value.find { it.group == productTrim }
-        return correlateProduct?.id ?: purchasesDao.productInsert(Group(group = productTrim))
+        val correlateProduct = products.value.find { it.product == productTrim }
+        return correlateProduct?.id ?: purchasesDao.productInsert(Group(product = productTrim))
     }
 
     private suspend fun getTitleId():Long{
         val titleTrim = title.trim()
         val correlateTitle = titles.value.find { it.title == titleTrim }
-        return correlateTitle?.id ?: purchasesDao.titleInsert(Product(title = titleTrim))
+        return correlateTitle?.id ?: purchasesDao.titleInsert(Title(title = titleTrim))
     }
 }
