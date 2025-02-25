@@ -80,6 +80,13 @@ class DataBaseFragment : Fragment() {
             }
         }
 
+        binding.filter.setOnCheckedChangeListener { _, isChecked ->
+            binding.filter.text =
+                if(isChecked) getString(R.string.db_frag_filter_only_empty)
+                else getString(R.string.db_frag_filter_all)
+            viewModel.onOnlyZeroCheckedChange(isChecked)
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             delay(200)
             when (viewModel.checkedRadio) {

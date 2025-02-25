@@ -22,19 +22,25 @@ class DataBaseViewModel(
     private val titles = purchasesDao.titlesCounter()
         .onEach {
             if (_checkedRadio == DbItemType.TITLE) {
-                _items.value = titlesCounterToDbItems(it)
+//                _items.value = titlesCounterToDbItems(it)
+                val tmp = titlesCounterToDbItems(it)
+                _items.value = if(filterOn) applyFilter(tmp) else tmp
             }
         }
     private val shops = purchasesDao.shopsCounter()
         .onEach {
             if (_checkedRadio == DbItemType.SHOP) {
-                _items.value = shopsCounterToDbItems(it)
+//                _items.value = shopsCounterToDbItems(it)
+                val tmp = shopsCounterToDbItems(it)
+                _items.value = if(filterOn) applyFilter(tmp) else tmp
             }
         }
     private val products = purchasesDao.productsCounter()
         .onEach {
             if (_checkedRadio == DbItemType.PRODUCT) {
-                _items.value = productsCounterToDbItems(it)
+//                _items.value = productsCounterToDbItems(it)
+                val tmp = productsCounterToDbItems(it)
+                _items.value = if(filterOn) applyFilter(tmp) else tmp
             }
         }
 
@@ -47,27 +53,11 @@ class DataBaseViewModel(
     private val _state = MutableStateFlow<DbFragmentState>(DbFragmentState.Normal)
     val state = _state.asStateFlow()
 
+    private var filterOn = false
+
     fun onCheckedChange(itemType: DbItemType) {
-        when (itemType) {
-            DbItemType.PRODUCT -> {
-                viewModelScope.launch {
-                    products.collect()
-                }
-            }
-
-            DbItemType.TITLE -> {
-                viewModelScope.launch {
-                    titles.collect()
-                }
-            }
-
-            DbItemType.SHOP -> {
-                viewModelScope.launch {
-                    shops.collect()
-                }
-            }
-        }
         _checkedRadio = itemType
+        collectData()
     }
 
     fun onItemApplyClick(item: DbItem, text: String) {
@@ -127,6 +117,11 @@ class DataBaseViewModel(
 
     fun onConfirmDialogShow() {
         _state.value = DbFragmentState.Normal
+    }
+
+    fun onOnlyZeroCheckedChange(isChecked: Boolean){
+        filterOn = isChecked
+        collectData()
     }
 
 
@@ -211,6 +206,30 @@ class DataBaseViewModel(
                 product.count,
                 DbItemType.PRODUCT
             )
+        }
+    }
+
+    private fun applyFilter(list: List<DbItem>): List<DbItem>{
+        return list.filter { it.counter == 0L }.toList()
+    }
+
+    private fun collectData(){
+        when (_checkedRadio) {
+            DbItemType.PRODUCT -> {
+                viewModelScope.launch {
+                    products.collect()
+                }
+            }
+            DbItemType.TITLE -> {
+                viewModelScope.launch {
+                    titles.collect()
+                }
+            }
+            DbItemType.SHOP -> {
+                viewModelScope.launch {
+                    shops.collect()
+                }
+            }
         }
     }
 }

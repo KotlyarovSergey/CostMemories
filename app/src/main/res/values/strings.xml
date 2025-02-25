@@ -43,6 +43,9 @@
     <string name="db_frag_title_caption">Название</string>
     <string name="db_frag_shop_caption">Магазин</string>
     <string name="db_frag_product_caption">Продукт</string>
+    <string name="db_frag_filter_only_empty">только пустые</string>
+    <string name="db_frag_filter_all">показывать все</string>
+
     <string name="db_item_icon_delete_description">Удалить</string>
     <string name="db_item_icon_apply_description">Применить</string>
     <string name="db_item_hint">элемент</string>

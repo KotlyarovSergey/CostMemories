@@ -59,6 +59,25 @@
         <androidx.cardview.widget.CardView
             style="@style/Widget.Material3.CardView.Elevated"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingVertical="8dp"
+            app:cardBackgroundColor="@color/data_base_card_background"
+            app:cardCornerRadius="16dp">
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/filter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:textColor="@color/on_data_base_card_background"
+                android:textSize="18sp"
+                android:text="@string/db_frag_filter_all"/>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            style="@style/Widget.Material3.CardView.Elevated"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1.0"
             android:layout_marginTop="8dp"
@@ -72,6 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                tools:listitem="@layout/db_item_view"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 
