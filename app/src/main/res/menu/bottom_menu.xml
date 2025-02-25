@@ -5,19 +5,19 @@
     <item
         android:id="@+id/homeFragment"
         android:icon="@drawable/icon_home_2"
-        android:title="Home"
+        android:title="@string/bottom_menu_home_title"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/addPurchaseFragment"
-        android:icon="@drawable/icon_purchase"
-        android:title="Purchase"
-        app:showAsAction="ifRoom" />
+<!--    <item-->
+<!--        android:id="@+id/addPurchaseFragment"-->
+<!--        android:icon="@drawable/icon_purchase"-->
+<!--        android:title="Purchase"-->
+<!--        app:showAsAction="ifRoom" />-->
 
     <item
         android:id="@+id/dataBaseFragment"
         android:icon="@drawable/icon_list"
-        android:title="Data Base"
+        android:title="@string/bottom_menu_data_base_title"
         app:showAsAction="ifRoom" />
 
 </menu>
