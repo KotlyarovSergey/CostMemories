@@ -20,4 +20,10 @@
         android:title="@string/bottom_menu_data_base_title"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/icon_settings"
+        android:title="@string/bottom_menu_setting_title"
+        app:showAsAction="ifRoom" />
+
 </menu>

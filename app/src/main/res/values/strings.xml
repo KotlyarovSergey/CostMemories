@@ -49,7 +49,10 @@
     <string name="db_item_icon_delete_description">Удалить</string>
     <string name="db_item_icon_apply_description">Применить</string>
     <string name="db_item_hint">элемент</string>
+
     <string name="bottom_menu_home_title">Покупки</string>
     <string name="bottom_menu_data_base_title">Данные</string>
+    <string name="bottom_menu_setting_title">Настройки</string>
+
 
 </resources>
