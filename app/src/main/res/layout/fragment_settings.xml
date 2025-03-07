@@ -6,7 +6,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:padding="8dp"
         tools:context=".ui.SettingsFragment">
+
 
         <TextView
             android:layout_width="match_parent"
@@ -14,6 +16,33 @@
             android:text="@string/bottom_menu_setting_title"
             android:textAlignment="center"
             android:textSize="64sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/export_db"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Export"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/import_db"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Import"/>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tv_result"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.0"/>
+
 
     </LinearLayout>
 </layout>
