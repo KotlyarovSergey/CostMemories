@@ -1,13 +1,17 @@
 package com.ksv.costmemories.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import com.ksv.costmemories.Dependencies
 import com.ksv.costmemories.data.Repository
 import com.ksv.costmemories.databinding.FragmentSettingsBinding
+import com.ksv.costmemories.entity.Shop
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -38,15 +42,33 @@ class SettingsFragment : Fragment() {
         }
 
         binding.importDb.setOnClickListener {
-            val repository = Repository()
             lifecycleScope.launch {
                 binding.progress.visibility = View.VISIBLE
-                val purchases = repository.importPurchasesTuplesFromCsv(requireContext(), FILE_NAME)
-                val newText = binding.tvResult.text.toString() + "\n" + purchases.toString()
-                binding.tvResult.text = newText
+
+                val repository = Repository()
+                repository.importPurchasesTuplesFromCsv(requireContext(), FILE_NAME)
+
+                //val purchases = repository.importPurchasesTuplesFromCsv(requireContext(), FILE_NAME)
+                //val newText = binding.tvResult.text.toString() + "\n" + purchases.toString()
+                //binding.tvResult.text = newText
+
                 binding.progress.visibility = View.GONE
             }
         }
+
+//        binding.importDb.setOnClickListener {
+//            val purchasesDao = Dependencies.getPurchasesDao()
+////            val shop = Shop(0, "Roosty")
+//            val shop = Shop(0, "Магнит")
+//            viewLifecycleOwner.lifecycleScope.launch {
+//                val id = purchasesDao.getShopByName(shop.shop)
+//                Log.d("ksvlog","id: $id")
+//                Toast.makeText(requireContext(), "${shop.shop} add, id: $id", Toast.LENGTH_LONG).show()
+//            }
+//
+//        }
+
+
     }
 
     companion object{

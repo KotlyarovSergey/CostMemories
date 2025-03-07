@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.ksv.costmemories.Dependencies
 import com.ksv.costmemories.entity.Group
+import com.ksv.costmemories.entity.Purchase
 import com.ksv.costmemories.entity.PurchaseCsv
 import com.ksv.costmemories.entity.PurchaseTuple
 import com.ksv.costmemories.entity.Shop
@@ -15,18 +16,17 @@ import com.opencsv.bean.HeaderColumnNameMappingStrategyBuilder
 import com.opencsv.bean.StatefulBeanToCsvBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class Repository {
+    private val purchasesDao = Dependencies.getPurchasesDao()
+
     suspend fun exportPurchasesTuplesToCsv(context: Context, fileName: String) {
         withContext(Dispatchers.IO) {
-            val purchasesDao = Dependencies.getPurchasesDao()
+            //val purchasesDao = Dependencies.getPurchasesDao()
             val purchasesTuple = purchasesDao.getAllAsTuple()
             val purchasesCsv = purchasesTuple.map { it.toCsv() }
 
@@ -54,6 +54,7 @@ class Repository {
     ) {
 
         val purchases = getPurchasesListFromFile(context, fileName)
+        Log.d("ksvlog", "Repository. purchases imported: ${purchases.size}")
         if(purchases.isNotEmpty()) {
             purchasesToDb(purchases)
         }
@@ -63,8 +64,38 @@ class Repository {
     }
 
     private suspend fun purchasesToDb(purchases: List<PurchaseTuple>){
-        val purchasesDao = Dependencies.getPurchasesDao()
-        Log.d("ksvlog", "purchasesToDb: $purchases")
+        purchases.onEach { purchase ->
+            val shopId = getShopId(shopName = purchase.shop)
+            val titleId = getTitleId(titleText = purchase.title)
+            val productId = getProductId(productName = purchase.product)
+            val purchaseDB = Purchase(
+                id = 0,
+                date = purchase.date,
+                productId = productId,
+                titleId = titleId,
+                shopId = shopId,
+                cost = purchase.cost,
+                comment = purchase.comment
+            )
+            purchasesDao.purchaseInsert(purchaseDB)
+            Log.d("ksvlog", "purchase insert: ${purchase.product} ${purchase.title}")
+        }
+
+    }
+
+    private suspend fun getShopId(shopName: String): Long{
+        val shop = purchasesDao.getShopByName(shopName)
+        return shop?.id ?: purchasesDao.shopInsert(Shop(shop = shopName))
+    }
+
+    private suspend fun getTitleId(titleText: String): Long{
+        val title = purchasesDao.getTitleByName(titleText)
+        return title?.id ?: purchasesDao.titleInsert(Title(title = titleText))
+    }
+
+    private suspend fun getProductId(productName: String): Long{
+        val product = purchasesDao.getProductByName(productName)
+        return product?.id ?: purchasesDao.productInsert(Group(product = productName))
     }
 
     private suspend fun getPurchasesListFromFile(

@@ -126,6 +126,9 @@ interface PurchasesDao {
     @Query ("SELECT * FROM shops WHERE id=:id")
     suspend fun getShopOnId(id: Long): Shop?
 
+    @Query ("SELECT * FROM shops WHERE shop=:shopName")
+    suspend fun getShopByName(shopName: String): Shop?
+
     @Insert
     suspend fun shopInsert(shop: Shop): Long
 
@@ -154,6 +157,9 @@ interface PurchasesDao {
     @Query ("SELECT * FROM titles WHERE id=:id")
     suspend fun getTitleOnId(id: Long): Title?
 
+    @Query ("SELECT * FROM titles WHERE title=:title")
+    suspend fun getTitleByName(title: String): Title?
+
     @Insert
     suspend fun titleInsert(title: Title): Long
 
@@ -180,6 +186,9 @@ interface PurchasesDao {
 
     @Query ("SELECT * FROM products WHERE id=:id")
     suspend fun getProductOnId(id: Long): Group?
+
+    @Query ("SELECT * FROM products WHERE product=:product")
+    suspend fun getProductByName(product: String): Group?
 
     @Insert
     suspend fun productInsert(group: Group): Long
