@@ -53,6 +53,8 @@
     <string name="bottom_menu_home_title">Покупки</string>
     <string name="bottom_menu_data_base_title">Данные</string>
     <string name="bottom_menu_setting_title">Настройки</string>
+    <string name="export_button">экспорт данных в файл</string>
+    <string name="import_button">Загрузить покупки из файла</string>
 
 
 </resources>

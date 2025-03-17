@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ksv.costmemories.data.PurchasesDao
 
-class DataBaseViewModelAdapter(
+class DataBaseViewModelFactory(
     private val application: Application,
     private val purchasesDao: PurchasesDao
 ) : ViewModelProvider.Factory {

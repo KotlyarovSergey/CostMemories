@@ -45,6 +45,6 @@
         tools:layout="@layout/fragment_data_base" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.ksv.costmemories.ui.SettingsFragment"
+        android:name="com.ksv.costmemories.ui.settings.view.SettingsFragment"
         android:label="SettingsFragment" />
 </navigation>

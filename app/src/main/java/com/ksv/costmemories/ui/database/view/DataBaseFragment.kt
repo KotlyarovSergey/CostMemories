@@ -3,7 +3,6 @@ package com.ksv.costmemories.ui.database.view
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
-import android.os.IBinder
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +17,7 @@ import com.ksv.costmemories.databinding.FragmentDataBaseBinding
 import com.ksv.costmemories.ui.database.entity.DbItem
 import com.ksv.costmemories.ui.database.entity.DbItemType
 import com.ksv.costmemories.ui.database.model.DataBaseViewModel
-import com.ksv.costmemories.ui.database.model.DataBaseViewModelAdapter
+import com.ksv.costmemories.ui.database.model.DataBaseViewModelFactory
 import com.ksv.costmemories.ui.database.model.DbFragmentState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
@@ -30,7 +29,7 @@ class DataBaseFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: DataBaseViewModel by viewModels {
-        DataBaseViewModelAdapter(
+        DataBaseViewModelFactory(
             requireActivity().application,
             Dependencies.getPurchasesDao()
         )

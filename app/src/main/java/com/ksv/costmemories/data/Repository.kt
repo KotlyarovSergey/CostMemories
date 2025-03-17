@@ -22,10 +22,10 @@ import java.io.BufferedReader
 import java.io.InputStream
 import java.io.OutputStreamWriter
 
-class Repository(private val purchasesDao: PurchasesDao) {
+class Repository(private val context: Context, private val purchasesDao: PurchasesDao) {
     //private val purchasesDao = Dependencies.getPurchasesDao()
 
-    suspend fun exportPurchasesTuplesToCsv(context: Context, uri: Uri): Boolean {
+    suspend fun exportPurchasesToCsv(uri: Uri): Boolean {
         return withContext(Dispatchers.IO) {
             val purchasesTuple = purchasesDao.getAllAsTuple()
             val purchasesCsv = purchasesTuple.map { it.toCsv() }
@@ -65,51 +65,9 @@ class Repository(private val purchasesDao: PurchasesDao) {
     }
 
 
-    suspend fun importPurchasesTuplesFromCsv(
-        context: Context,
-        uri: Uri
-    ) {
-        val purchases = getPurchasesListFromFile(context, uri)
-        purchasesToDb(purchases)
-    }
 
-    private suspend fun purchasesToDb(purchases: List<PurchaseTuple>) {
-        purchases.onEach { purchase ->
-            val shopId = getShopId(shopName = purchase.shop)
-            val titleId = getTitleId(titleText = purchase.title)
-            val productId = getProductId(productName = purchase.product)
-            val purchaseDB = Purchase(
-                id = 0,
-                date = purchase.date,
-                productId = productId,
-                titleId = titleId,
-                shopId = shopId,
-                cost = purchase.cost,
-                comment = purchase.comment
-            )
-            purchasesDao.purchaseInsert(purchaseDB)
-        }
-    }
 
-    private suspend fun getShopId(shopName: String): Long {
-        val shop = purchasesDao.getShopByName(shopName)
-        return shop?.id ?: purchasesDao.shopInsert(Shop(shop = shopName))
-    }
-
-    private suspend fun getTitleId(titleText: String): Long {
-        val title = purchasesDao.getTitleByName(titleText)
-        return title?.id ?: purchasesDao.titleInsert(Title(title = titleText))
-    }
-
-    private suspend fun getProductId(productName: String): Long {
-        val product = purchasesDao.getProductByName(productName)
-        return product?.id ?: purchasesDao.productInsert(Group(product = productName))
-    }
-
-    private suspend fun getPurchasesListFromFile(
-        context: Context,
-        uri: Uri
-    ): List<PurchaseTuple> {
+    suspend fun getPurchasesListFromFile(uri: Uri): List<PurchaseTuple> {
         return withContext(Dispatchers.IO) {
             var inputStream: InputStream? = null
             var bufferedReader: BufferedReader? = null
@@ -139,4 +97,38 @@ class Repository(private val purchasesDao: PurchasesDao) {
         }
     }
 
+    suspend fun purchasesToDb(purchases: List<PurchaseTuple>) {
+        purchases.onEach { purchase ->
+            val shopId = getShopId(shopName = purchase.shop)
+            val titleId = getTitleId(titleText = purchase.title)
+            val productId = getProductId(productName = purchase.product)
+            val purchaseDB = Purchase(
+                id = 0,
+                date = purchase.date,
+                productId = productId,
+                titleId = titleId,
+                shopId = shopId,
+                cost = purchase.cost,
+                comment = purchase.comment
+            )
+            purchasesDao.purchaseInsert(purchaseDB)
+        }
+    }
+
+
+
+    private suspend fun getShopId(shopName: String): Long {
+        val shop = purchasesDao.getShopByName(shopName)
+        return shop?.id ?: purchasesDao.shopInsert(Shop(shop = shopName))
+    }
+
+    private suspend fun getTitleId(titleText: String): Long {
+        val title = purchasesDao.getTitleByName(titleText)
+        return title?.id ?: purchasesDao.titleInsert(Title(title = titleText))
+    }
+
+    private suspend fun getProductId(productName: String): Long {
+        val product = purchasesDao.getProductByName(productName)
+        return product?.id ?: purchasesDao.productInsert(Group(product = productName))
+    }
 }

@@ -2,47 +2,61 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.ksv.costmemories.ui.settings.model.SettingsViewModel" />
+
+        <import type="android.view.View" />
+
+        <import type="com.ksv.costmemories.ui.settings.model.SettingsState" />
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="8dp"
-        tools:context=".ui.SettingsFragment">
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/bottom_menu_setting_title"
-            android:textAlignment="center"
-            android:textSize="64sp" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/export_db"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Export"/>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/import_db"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Import"/>
+        android:layout_height="match_parent">
 
         <ProgressBar
             android:id="@+id/progress"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:visibility="gone"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="@{viewModel.state instanceof SettingsState.Loading ? View.VISIBLE : View.GONE}" />
 
-        <TextView
-            android:id="@+id/tv_result"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.0"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="8dp"
+            tools:context=".ui.settings.view.SettingsFragment">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/bottom_menu_setting_title"
+                android:textAlignment="center"
+                android:textSize="32sp"
+                android:textStyle="bold" />
 
-    </LinearLayout>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/export_db"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clickable="@{!(viewModel.state instanceof SettingsState.Loading)}"
+                android:onClick="@{()-> viewModel.onExportClick()}"
+                android:text="@string/export_button" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/import_db"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clickable="@{!(viewModel.state instanceof SettingsState.Loading)}"
+                android:onClick="@{()-> viewModel.onImportClick()}"
+                android:text="@string/import_button" />
+
+        </LinearLayout>
+    </FrameLayout>
 </layout>
