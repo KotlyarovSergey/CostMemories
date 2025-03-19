@@ -7,6 +7,7 @@ import com.ksv.costmemories.entity.Group
 import com.ksv.costmemories.entity.Title
 import com.ksv.costmemories.entity.Purchase
 import com.ksv.costmemories.entity.Shop
+import com.ksv.costmemories.util.DateUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,6 +51,7 @@ class EditPurchaseViewModel(
     val state = _state.asStateFlow()
 
     var date: String = ""
+    //var milliseconds: String = ""
     var product: String = ""
     var title: String = ""
     var shop: String = ""
@@ -138,7 +140,7 @@ class EditPurchaseViewModel(
                 val productId = getProductId()
                 val purchase = Purchase(
                     id = id,
-                    date = date,
+                    milliseconds = DateUtils.longDateFormatToMills(date),
                     productId = productId,
                     shopId = shopId,
                     titleId = titleId,
@@ -157,7 +159,7 @@ class EditPurchaseViewModel(
             val titleId = getTitleId()
             val productId = getProductId()
             val purchase = Purchase(
-                date = date,
+                milliseconds = DateUtils.longDateFormatToMills(date),
                 productId = productId,
                 shopId = shopId,
                 titleId = titleId,

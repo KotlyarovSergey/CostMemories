@@ -54,41 +54,33 @@ class HomeViewModel(
         _state.value = if (purchases.value.isEmpty()) HomeState.Empty else HomeState.Normal
     }
 
-//    fun onFilterTextChanged(ch: CharSequence) {
-    fun onFilterTextChanged() {
-//        Log.d("ksvlog", "onFilterChanged $filterSequence")
-//        filterSequence = ch.toString()
-        _purchases.value = filter(_purchasesDB.value)
-        _state.value = if (_purchases.value.isEmpty()) HomeState.Empty else HomeState.Normal
-    }
-
     private fun filter(purchases: List<PurchaseTuple>): List<PurchaseTuple> {
         //Log.d("ksvlog", "HomeViewModel.filter:\n\tpurchases: $purchases\n\tfilter: $filterSequence")
         try {
-        val filtered = purchases
-            .filter {
-                it.title.contains(filterSequence, true) ||
-                it.product.contains(filterSequence, true)
-            }
+            val filtered = purchases
+                .filter {
+                    it.title.contains(filterSequence, true) ||
+                    it.product.contains(filterSequence, true) ||
+                    it.comment.contains(filterSequence, true)
+                }
 
-        return filtered
-        } catch (exception: Exception){
-            Log.d("ksvlog", "!!! Exception on HomeViewModel.filter:\n\tpurchases: $purchases\n\tfilter: $filterSequence")
+            return filtered
+        } catch (exception: Exception) {
+            Log.d(
+                "ksvlog",
+                "!!! Exception on HomeViewModel.filter:\n\tpurchases: $purchases\n\tfilter: $filterSequence"
+            )
             return purchases
         }
     }
 
-    private fun filterPurchases(){
+    private fun filterPurchases() {
         _purchases.value = _purchasesDB.value.filter {
             it.title.contains(filterSequence, true) ||
-            it.product.contains(filterSequence, true)
+            it.product.contains(filterSequence, true) ||
+            it.comment.contains(filterSequence, true)
         }
         _state.value = if (_purchases.value.isEmpty()) HomeState.Empty else HomeState.Normal
-    }
-
-    private fun filterPurchasesAdvance(){
-        val words = filterSequence.split(" ")
-        
     }
 
 }

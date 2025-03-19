@@ -104,7 +104,7 @@ class Repository(private val context: Context, private val purchasesDao: Purchas
             val productId = getProductId(productName = purchase.product)
             val purchaseDB = Purchase(
                 id = 0,
-                date = purchase.date,
+                milliseconds = purchase.milliseconds,
                 productId = productId,
                 titleId = titleId,
                 shopId = shopId,

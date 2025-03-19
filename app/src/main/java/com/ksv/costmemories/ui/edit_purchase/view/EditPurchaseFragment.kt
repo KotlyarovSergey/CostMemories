@@ -21,7 +21,12 @@ import com.ksv.costmemories.ui.edit_purchase.model.EditState
 import com.ksv.costmemories.util.DateUtils
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class EditPurchaseFragment : Fragment() {
     private var _binding: FragmentEditPurchaseBinding? = null
@@ -55,7 +60,7 @@ class EditPurchaseFragment : Fragment() {
         viewModel.purchaseTuple.onEach { purchase ->
             //Log.d("ksvlog", "purchase: $purchase")
             purchase?.let {
-                binding.date.setText(purchase.date)
+                binding.date.setText(DateUtils.millsToLongDateFormat(purchase.milliseconds))
                 binding.product.setText(purchase.product)
                 binding.title.setText(purchase.title)
                 binding.shop.setText(purchase.shop)
@@ -149,5 +154,12 @@ class EditPurchaseFragment : Fragment() {
                 viewModel.onDeleteConfirmDialogDismiss()
             }
             .show()
+    }
+
+    private fun millisecondToDateFormat(milliseconds: Long): String{
+        val date = Date.from(Instant.ofEpochMilli(milliseconds))
+        val sdf = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
+        val dateText = sdf.format(date)
+        return dateText
     }
 }

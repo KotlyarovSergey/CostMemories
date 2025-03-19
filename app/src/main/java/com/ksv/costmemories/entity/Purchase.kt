@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.util.Date
 
 @Entity(
     tableName = "purchases",
@@ -33,7 +34,7 @@ import androidx.room.PrimaryKey
 )
 data class Purchase(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val date: String,
+    val milliseconds: Long,
     @ColumnInfo(name = "product_id") val productId: Long,
     @ColumnInfo(name = "title_id") val titleId: Long,
     @ColumnInfo(name = "shop_id") val shopId: Long,

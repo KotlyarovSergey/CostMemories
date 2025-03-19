@@ -2,10 +2,11 @@ package com.ksv.costmemories.entity.mapper
 
 import com.ksv.costmemories.entity.PurchaseCsv
 import com.ksv.costmemories.entity.PurchaseTuple
+import com.ksv.costmemories.util.DateUtils
 
 fun PurchaseTuple.toCsv() = PurchaseCsv(
     id = id,
-    date = date,
+    date = DateUtils.millsToLongDateFormat(milliseconds),
     product = product,
     title = title,
     shop = shop,
@@ -15,7 +16,7 @@ fun PurchaseTuple.toCsv() = PurchaseCsv(
 
 fun PurchaseCsv.toTuple() = PurchaseTuple(
     id = id,
-    date = date,
+    milliseconds = DateUtils.longDateFormatToMills(date),
     product = product,
     title = title,
     shop = shop,

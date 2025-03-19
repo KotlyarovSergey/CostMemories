@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.ksv.costmemories.databinding.PurchaseViewBinding
 import com.ksv.costmemories.entity.PurchaseTuple
+import com.ksv.costmemories.util.DateUtils
 
 class PurchaseAdapter(
     private val onClick: (Long) -> Unit,
@@ -17,7 +18,8 @@ class PurchaseAdapter(
         ViewHolder(binding.root){
         fun bind(purchase: PurchaseTuple, onClick: (Long) -> Unit, onLongClick: (Long) -> Boolean){
             binding.purchase = purchase
-            binding.rootView.setOnClickListener { onClick(purchase.id) }
+            binding.date.text = DateUtils.millsToShortDateFormat(purchase.milliseconds)
+             binding.rootView.setOnClickListener { onClick(purchase.id) }
             binding.rootView.setOnLongClickListener { onLongClick(purchase.id) }
         }
     }

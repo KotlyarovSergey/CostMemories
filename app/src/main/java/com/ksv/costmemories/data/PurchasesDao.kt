@@ -21,7 +21,7 @@ interface PurchasesDao {
 
     @Query("SELECT " +
                 "purchases.id, " +
-                "date, " +
+                "milliseconds, " +
                 "cost, " +
                 "comment, " +
                 "products.product AS product, " +
@@ -37,7 +37,7 @@ interface PurchasesDao {
 
     @Query("SELECT " +
             "purchases.id, " +
-            "date, " +
+            "milliseconds, " +
             "cost, " +
             "comment, " +
             "products.product AS product, " +
@@ -48,13 +48,13 @@ interface PurchasesDao {
             "INNER JOIN products ON purchases.product_id = products.id " +
             "INNER JOIN titles ON purchases.title_id = titles.id " +
             "INNER JOIN shops ON purchases.shop_id = shops.id "+
-            "ORDER by purchases.id DESC")
+            "ORDER by purchases.milliseconds DESC, product ASC, title ASC")
     fun getAllAsTupleFlow(): Flow<List<PurchaseTuple>>
 
 
     @Query("SELECT " +
             "purchases.id, " +
-            "date, " +
+            "milliseconds, " +
             "cost, " +
             "comment, " +
             "products.product AS product, " +
@@ -71,7 +71,7 @@ interface PurchasesDao {
     @Query("SELECT * FROM purchases WHERE purchases.id=:id")
     suspend fun getPurchase(id: Long): Purchase
 
-    @Query("SELECT purchases.id, date, cost, comment, " +
+    @Query("SELECT purchases.id, milliseconds, cost, comment, " +
             "products.product AS product, " +
             "titles.title AS title, " +
             "shops.shop AS shop, comment " +

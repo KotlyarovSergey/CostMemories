@@ -1,5 +1,6 @@
 package com.ksv.costmemories.ui.add_purchase.model
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ksv.costmemories.data.PurchasesDao
@@ -40,6 +41,7 @@ class AddPurchaseViewModel(
         )
 
     var date: String = getToday()
+//    var milliseconds: Long = Calendar.getInstance().timeInMillis
     var product: String = ""
     var title: String = ""
     var shop: String = ""
@@ -97,13 +99,15 @@ class AddPurchaseViewModel(
             val titleId = getTitleId()
             val productId = getProductId()
             val purchase = Purchase(
-                date = date,
+                milliseconds = DateUtils.longDateFormatToMills(date),
                 productId = productId,
                 shopId = shopId,
                 titleId = titleId,
                 comment = comment,
                 cost = cost.toInt(),
             )
+            Log.d("ksvlog", "Date: $date")
+            Log.d("ksvlog", "purchase: $purchase")
             purchasesDao.purchaseInsert(purchase)
         }
     }
@@ -131,5 +135,4 @@ class AddPurchaseViewModel(
         val todayString = DateUtils.dateFromMillsToString(todayInMills)
         return todayString
     }
-
 }

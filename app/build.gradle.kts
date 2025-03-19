@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    //id("org.jetbrains.kotlin.kapt")
+    id("org.jetbrains.kotlin.kapt")
     id("com.google.devtools.ksp")
     id("androidx.navigation.safeargs.kotlin")
 }
